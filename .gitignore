@@ -1,0 +1,8 @@
+/Debug
+/RentaActivos/Debug
+/.vs
+*.exe
+*.vcxproj
+*.user
+*.filters
+*.sln
