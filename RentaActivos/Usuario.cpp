@@ -3,13 +3,13 @@
 
 Usuario::Usuario(string nombre, string usuario, string contraseña) {
 
-	setNombre(nombre);
+	setNumero(nombre);
 	setUsuario(usuario);
 	setContraseña(contraseña);
 }
 
 
-void Usuario::setNombre(string nombre) {
+void Usuario::setNumero(string nombre) {
 	this->nombre = nombre;
 }
 

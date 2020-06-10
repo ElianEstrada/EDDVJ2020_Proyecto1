@@ -14,7 +14,7 @@ class Usuario
 
 public:
 	Usuario(string nombre, string usuario, string contraseña);
-	void setNombre(string nombre);
+	void setNumero(string nombre);
 	string getNombre();
 	void setUsuario(string usuario);
 	string getUsuario();
