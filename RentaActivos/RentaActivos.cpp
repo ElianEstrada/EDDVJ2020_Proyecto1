@@ -1,16 +1,12 @@
 
 #include <iostream>
 #include "MenuPrincipal.h"
+#include "Activo.h"
 
-
-#include "ArbolActivo.h"
 
 using namespace std;
 
-
-int main()
-{
-    /*
+/*
      ListaTransaccion lista;
 
     lista.insertarAlFinal(new Transaccion(1, "Elian", "Guatemala", "Libreria h45", "2020-06-07", 3));
@@ -30,26 +26,15 @@ int main()
     matriz->insertarCabVertical("Walmart");
     */
 
-    ArbolActivo* arbol = new ArbolActivo();
 
-    arbol->insertarActivo(2, arbol->getRaiz());
-    arbol->insertarActivo(1, arbol->getRaiz());
-    arbol->insertarActivo(8, arbol->getRaiz());
-    arbol->insertarActivo(5, arbol->getRaiz());
-    arbol->insertarActivo(9, arbol->getRaiz());
-    arbol->insertarActivo(0, arbol->getRaiz());
-    arbol->insertarActivo(4, arbol->getRaiz());
-    arbol->insertarActivo(6, arbol->getRaiz());
+int main()
+{
 
-    arbol->eliminarActivo(8);
-    arbol->eliminarActivo(5);
-    arbol->eliminarActivo(6);
-    arbol->eliminarActivo(9);
-    arbol->eliminarActivo(1);
-    arbol->eliminarActivo(4);
-    arbol->eliminarActivo(2);
-    arbol->eliminarActivo(0);
+    Activo* a1 = new Activo("Elian", "Guapo");
+    Activo* a2 = new Activo("Alex", "Meh");
+    Activo* a3 = new Activo("Daniel", "Ufff");
 
+    cout << a1->getID() << " " << a2->getID() << " " << a3->getID() << endl;
 
     cin.ignore();
     cin.get();
