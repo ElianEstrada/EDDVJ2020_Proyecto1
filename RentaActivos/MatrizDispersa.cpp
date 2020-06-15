@@ -45,65 +45,84 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 	NodoMatriz* cabezaDep = buscarDepartamento(departamento);
 	NodoMatriz* cabezaEmp = buscarEmpresa(empresa);
 
-	
 
 	if (cabezaDep == nullptr || cabezaEmp == nullptr) {
 
 		if (cabezaDep == nullptr) {
 			cabezaDep = insertarCabHorizontal(departamento);
 		}
-		if(cabezaEmp == nullptr) {
+		if (cabezaEmp == nullptr) {
 			cabezaEmp = insertarCabVertical(empresa);
 		}
 
 		insertarAlFinal(usuario, cabezaDep, cabezaEmp);
 
 	}
-	else if(cabezaDep->getSig() == nullptr || cabezaEmp->getAbajo() == nullptr){
+	else if (cabezaDep->getSig() == nullptr || cabezaEmp->getAbajo() == nullptr) {
 
 		NodoMatriz* usuarioActual = existe(cabezaDep, empresa);
 
 		if (cabezaDep->getSig() == nullptr && cabezaEmp->getAbajo() == nullptr) {
 
-			if (usuarioActual != nullptr) {
-				insertarAtras(usuario, usuarioActual);
+			if (existeNombre(usuarioActual, usuario->getNombre())) {
+				if (usuarioActual != nullptr) {
+					insertarAtras(usuario, usuarioActual);
+				}
+				else {
+					insertarAlFinal(usuario, cabezaDep, cabezaEmp);
+				}
 			}
 			else {
-				insertarAlFinal(usuario, cabezaDep, cabezaEmp);
+				cout << "No se permiten nombres repetidos en el mismo luegar" << endl;
 			}
 
 		}
 		else if (cabezaDep->getSig() == nullptr) {
-			
-			if (usuarioActual != nullptr) {
-				insertarAtras(usuario, usuarioActual);
+
+			if (existeNombre(usuarioActual, usuario->getNombre())) {
+				if (usuarioActual != nullptr) {
+					insertarAtras(usuario, usuarioActual);
+				}
+				else {
+					insertarAlFinalEmp(usuario, cabezaEmp, departamento);
+				}
 			}
 			else {
-				insertarAlFinalEmp(usuario, cabezaEmp, departamento);
+				cout << "No se permiten nombres repetidos en el mismo luegar" << endl;
 			}
 
 		}
 		else {
 
-			if (usuarioActual != nullptr) {
-				insertarAtras(usuario, usuarioActual);
+			if (existeNombre(usuarioActual, usuario->getNombre())) {
+				if (usuarioActual != nullptr) {
+					insertarAtras(usuario, usuarioActual);
+				}
+				else {
+					insertarAlFinalDep(usuario, cabezaDep, empresa);
+				}
 			}
 			else {
-				insertarAlFinalDep(usuario, cabezaDep, empresa);
+				cout << "No se permiten nombres repetidos en el mismo luegar" << endl;
 			}
 
 		}
 
 	}
 	else {
-		
+
 		NodoMatriz* usuarioActual = existe(cabezaDep, empresa);
 
-		if (usuarioActual != nullptr) {
-			insertarAtras(usuario, usuarioActual);
+		if (existeNombre(usuarioActual, usuario->getNombre())) {
+			if (usuarioActual != nullptr) {
+				insertarAtras(usuario, usuarioActual);
+			}
+			else {
+				insertarEnmedio(usuario, cabezaDep, cabezaEmp);
+			}
 		}
 		else {
-			insertarEnmedio(usuario, cabezaDep, cabezaEmp);
+			cout << "No se permiten nombres repetidos en el mismo luegar" << endl;
 		}
 
 	}
@@ -415,6 +434,25 @@ NodoMatriz* MatrizDispersa::existe(NodoMatriz* cabezaH, string empresa) {
 	}
 
 	return nullptr;
+
+}
+
+bool MatrizDispersa::existeNombre(NodoMatriz* usuarios, string nombre) {
+
+	NodoMatriz* aux = usuarios;
+
+	if (aux != nullptr) {
+		while (aux != nullptr) {
+
+			if (aux->getUsuario()->getNombre() == nombre) {
+				return false;
+			}
+
+			aux = aux->getAtras();
+		}
+	}
+
+	return true;
 
 }
 

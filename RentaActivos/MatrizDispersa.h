@@ -32,6 +32,7 @@ public:
 
 
 	NodoMatriz* existe(NodoMatriz* cabezaH, string empresa);
+	bool existeNombre(NodoMatriz* usuarios, string nombre);
 
 
 	bool estaAbajo(NodoMatriz* nodo, string empresa);

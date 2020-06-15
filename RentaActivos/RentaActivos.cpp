@@ -28,6 +28,8 @@ int main()
     matriz->insertarUsuario(new Usuario("Luis", "norky", "abcdefg"), "zacapa", "max");
 
     matriz->insertarUsuario(new Usuario("Aris", "yaris", "45648"), "suchitepequez", "max");
+    matriz->insertarUsuario(new Usuario("Aris", "hoalek", "13213"), "suchitepequez", "max");
+    matriz->insertarUsuario(new Usuario("Ana", "hoalek", "13213"), "suchitepequez", "max");
     //menuPrincipal();
 
     cin.ignore();
