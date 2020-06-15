@@ -45,6 +45,7 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 	NodoMatriz* cabezaDep = buscarDepartamento(departamento);
 	NodoMatriz* cabezaEmp = buscarEmpresa(empresa);
 
+	
 
 	if (cabezaDep == nullptr || cabezaEmp == nullptr) {
 
@@ -60,16 +61,49 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 	}
 	else if(cabezaDep->getSig() == nullptr || cabezaEmp->getAbajo() == nullptr){
 
+		NodoMatriz* usuarioActual = existe(cabezaDep, empresa);
+
 		if (cabezaDep->getSig() == nullptr && cabezaEmp->getAbajo() == nullptr) {
 
-			insertarAlFinal(usuario, cabezaDep, cabezaEmp);
+			if (usuarioActual != nullptr) {
+				insertarAtras(usuario, usuarioActual);
+			}
+			else {
+				insertarAlFinal(usuario, cabezaDep, cabezaEmp);
+			}
 
 		}
 		else if (cabezaDep->getSig() == nullptr) {
-			insertarAlFinalEmp(usuario, cabezaEmp, departamento);
+			
+			if (usuarioActual != nullptr) {
+				insertarAtras(usuario, usuarioActual);
+			}
+			else {
+				insertarAlFinalEmp(usuario, cabezaEmp, departamento);
+			}
+
 		}
 		else {
-			insertarAlFinalDep(usuario, cabezaDep, empresa);
+
+			if (usuarioActual != nullptr) {
+				insertarAtras(usuario, usuarioActual);
+			}
+			else {
+				insertarAlFinalDep(usuario, cabezaDep, empresa);
+			}
+
+		}
+
+	}
+	else {
+		
+		NodoMatriz* usuarioActual = existe(cabezaDep, empresa);
+
+		if (usuarioActual != nullptr) {
+			insertarAtras(usuario, usuarioActual);
+		}
+		else {
+			insertarEnmedio(usuario, cabezaDep, cabezaEmp);
 		}
 
 	}
@@ -185,6 +219,49 @@ void MatrizDispersa::insertarAlFinalDep(Usuario* usuario, NodoMatriz* cabeceraH,
 }
 
 
+void MatrizDispersa::insertarEnmedio(Usuario* usuario, NodoMatriz* cabeceraH, NodoMatriz* cabeceraV) {
+
+	NodoMatriz* nuevoUsuario = new NodoMatriz(usuario);
+
+	NodoMatriz* auxV = cabeceraV;
+	NodoMatriz* auxH = cabeceraH;
+
+	while (auxH->getAbajo() != nullptr && !estaAbajo(buscarCabeceraV(auxH), cabeceraV->getCabecera())) {
+		
+		auxH = auxH->getAbajo();
+	}
+
+	if (estaAbajo(buscarCabeceraV(auxH), cabeceraV->getCabecera())) {
+
+		insertarAlMedio(nuevoUsuario, auxH, true);
+
+	}
+	else {
+
+		auxH->setAbajo(nuevoUsuario);
+		nuevoUsuario->setArriba(auxH);
+
+	}
+
+
+	while (auxV->getSig() != nullptr && !estaIzquierda(buscarCabeceraH(auxV), cabeceraH->getCabecera())) {
+
+		auxV = auxV->getSig();
+	}
+
+	if (estaIzquierda(buscarCabeceraH(auxV), cabeceraH->getCabecera())) {
+		insertarAlMedio(nuevoUsuario, auxV, false);
+	}
+	else {
+
+		auxV->setSig(nuevoUsuario);
+		nuevoUsuario->setAnt(auxV);
+
+	}
+
+}
+
+
 void MatrizDispersa::insertarAlMedio(NodoMatriz* nuevoUsuario, NodoMatriz* abajo, bool bandera) {
 
 	if (bandera) {
@@ -202,6 +279,22 @@ void MatrizDispersa::insertarAlMedio(NodoMatriz* nuevoUsuario, NodoMatriz* abajo
 
 }
 
+
+void MatrizDispersa::insertarAtras(Usuario* nuevoUsuario, NodoMatriz* usuarioActual) {
+
+	NodoMatriz* nuevo = new NodoMatriz(nuevoUsuario);
+
+	NodoMatriz* aux = usuarioActual;
+
+	while (aux->getAtras() != nullptr) {
+
+		aux = aux->getAtras();
+	}
+
+	aux->setAtras(nuevo);
+	nuevo->setDelante(aux);
+
+}
 
 NodoMatriz* MatrizDispersa::buscarCabeceraV(NodoMatriz* usuarioActual) {
 
@@ -305,4 +398,57 @@ NodoMatriz* MatrizDispersa::buscarEmpresa(string empresa) {
 	}
 
 	return nullptr;
+}
+
+NodoMatriz* MatrizDispersa::existe(NodoMatriz* cabezaH, string empresa) {
+
+	NodoMatriz* aux = cabezaH;
+
+	while (aux->getAbajo() != nullptr) {
+
+		if (empresa == buscarCabeceraV(aux->getAbajo())->getCabecera()) {
+			return aux->getAbajo();
+		}
+
+		aux = aux->getAbajo();
+		
+	}
+
+	return nullptr;
+
+}
+
+
+bool MatrizDispersa::estaAbajo(NodoMatriz* nodo, string empresa) {
+
+	NodoMatriz* aux = nodo;
+
+	while (aux->getCabecera() != empresa && aux->getArriba() != nullptr) {
+
+		aux = aux->getArriba();
+	}
+
+	if (aux->getArriba() == nullptr) {
+		return false;
+	}
+	return true;
+
+}
+
+
+bool MatrizDispersa::estaIzquierda(NodoMatriz* nodo, string departamento) {
+
+	NodoMatriz* aux = nodo;
+
+	while (aux->getCabecera() != departamento && aux->getAnt() != nullptr) {
+
+		aux = aux->getAnt();
+	}
+
+	if (aux->getAnt() == nullptr) {
+		return false;
+	}
+	else {
+		return true;
+	}
 }
