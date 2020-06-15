@@ -66,10 +66,10 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 
 		}
 		else if (cabezaDep->getSig() == nullptr) {
-
+			insertarAlFinalEmp(usuario, cabezaEmp, departamento);
 		}
 		else {
-
+			insertarAlFinalDep(usuario, cabezaDep, empresa);
 		}
 
 	}
@@ -102,7 +102,7 @@ void MatrizDispersa::insertarAlFinal(Usuario* usuario, NodoMatriz* cabeceraH, No
 }
 
 
-void MatrizDispersa::insertarAlFinalEmp(Usuario* usuario, NodoMatriz* cabeceraV) {
+void MatrizDispersa::insertarAlFinalEmp(Usuario* usuario, NodoMatriz* cabeceraV, string departamento) {
 
 	NodoMatriz* nuevoUsuario = new NodoMatriz(usuario);
 
@@ -116,8 +116,164 @@ void MatrizDispersa::insertarAlFinalEmp(Usuario* usuario, NodoMatriz* cabeceraV)
 	auxV->setSig(nuevoUsuario);
 	nuevoUsuario->setAnt(auxV);
 
+	NodoMatriz* userAbajo = buscarUsuarioAbajo(cabeceraV->getSig(), departamento);
+
+	if (userAbajo != nullptr) {
+		insertarAlMedio(nuevoUsuario, userAbajo, true);
+	}
+	else {
+
+		NodoMatriz* auxH = ini;
+
+		while (auxH->getSig() != nullptr) {
+
+			auxH = auxH->getSig();
+		}
+
+
+		while (auxH->getAbajo() != nullptr) {
+
+			auxH = auxH->getAbajo();
+		}
+
+		auxH->setAbajo(nuevoUsuario);
+		nuevoUsuario->setArriba(auxH);
+
+	}
+	
+
 }
 
+void MatrizDispersa::insertarAlFinalDep(Usuario* usuario, NodoMatriz* cabeceraH, string empresa) {
+
+	NodoMatriz* nuevoUsuario = new NodoMatriz(usuario);
+
+	NodoMatriz* aux = cabeceraH;
+
+	while (aux->getAbajo() != nullptr) {
+
+		aux = aux->getAbajo();
+	}
+
+	aux->setAbajo(nuevoUsuario);
+	nuevoUsuario->setArriba(aux);
+
+	NodoMatriz* userSig = buscarUsuarioSig(cabeceraH->getSig(), empresa);
+	if (userSig != nullptr) {
+		insertarAlMedio(nuevoUsuario, userSig, false);
+	}
+	else {
+
+		NodoMatriz* auxV = ini;
+
+		while (auxV->getAbajo() != nullptr) {
+
+			auxV = auxV->getAbajo();
+		}
+
+		while (auxV->getSig() != nullptr) {
+
+			auxV = auxV->getSig();
+		}
+
+		auxV->setSig(nuevoUsuario);
+		nuevoUsuario->setAnt(auxV);
+
+	}
+	
+
+}
+
+
+void MatrizDispersa::insertarAlMedio(NodoMatriz* nuevoUsuario, NodoMatriz* abajo, bool bandera) {
+
+	if (bandera) {
+		abajo->getArriba()->setAbajo(nuevoUsuario);
+		nuevoUsuario->setArriba(abajo->getArriba());
+		nuevoUsuario->setAbajo(abajo);
+		abajo->setArriba(nuevoUsuario);
+	}
+	else {
+		abajo->getAnt()->setSig(nuevoUsuario);
+		nuevoUsuario->setAnt(abajo->getAnt());
+		nuevoUsuario->setSig(abajo);
+		abajo->setAnt(nuevoUsuario);
+	}
+
+}
+
+
+NodoMatriz* MatrizDispersa::buscarCabeceraV(NodoMatriz* usuarioActual) {
+
+	NodoMatriz* aux = usuarioActual;
+
+	while (aux->getAnt() != nullptr) {
+
+		aux = aux->getAnt();
+	}
+
+	return aux;
+
+}
+
+NodoMatriz* MatrizDispersa::buscarUsuarioAbajo(NodoMatriz* nodo, string dep) {
+
+	NodoMatriz* aux = nodo;
+
+	if (aux != nullptr) {
+		while (aux->getSig() != nullptr) {
+
+			aux = aux->getSig();
+		}
+
+		if (dep == buscarCabeceraH(aux)->getCabecera()) {
+			return aux;
+		}
+		else {
+			return buscarUsuarioAbajo(nodo->getAbajo(), dep);
+		}
+	}
+	else {
+		return nullptr;
+	}
+
+}
+
+NodoMatriz* MatrizDispersa::buscarCabeceraH(NodoMatriz* usuarioActual) {
+
+	NodoMatriz* aux = usuarioActual;
+
+	while (aux->getArriba() != nullptr) {
+
+		aux = aux->getArriba();
+	}
+
+	return aux;
+
+}
+
+NodoMatriz* MatrizDispersa::buscarUsuarioSig(NodoMatriz* nodo, string emp) {
+
+	NodoMatriz* aux = nodo;
+
+	if (aux != nullptr) {
+		while (aux->getAbajo() != nullptr) {
+
+			aux = aux->getAbajo();
+		}
+
+		if (emp == buscarCabeceraV(aux)->getCabecera()) {
+			return aux;
+		}
+		else {
+			return buscarUsuarioSig(nodo->getSig(), emp);
+		}
+	}
+	else {
+		return nullptr;
+	}
+
+}
 
 NodoMatriz* MatrizDispersa::buscarDepartamento(string departamento) {
 

@@ -18,9 +18,16 @@ public:
 
 	//Metodos de la lista doblemente enlazada
 	void insertarAlFinal(Usuario* usuario, NodoMatriz* cabeceraH, NodoMatriz* cabeceraV);
-	void insertarAlFinalDep(Usuario* usuario, NodoMatriz* cabeceraH);
-	void insertarAlFinalEmp(Usuario* usuario, NodoMatriz* cabeceraV);
+	void insertarAlFinalDep(Usuario* usuario, NodoMatriz* cabeceraH, string empresa);
+	void insertarAlFinalEmp(Usuario* usuario, NodoMatriz* cabeceraV, string departamento);
+
+	void insertarAlMedio(NodoMatriz* nuevoUsuario, NodoMatriz* abajo, bool bandera);
 	void insertarEnmedio(Usuario* usuario, NodoMatriz* cabecera);
+
+	NodoMatriz* buscarCabeceraV(NodoMatriz* usuarioActual);
+	NodoMatriz* buscarUsuarioAbajo(NodoMatriz* nodo, string dep);
+	NodoMatriz* buscarCabeceraH(NodoMatriz* usuarioActual);
+	NodoMatriz* buscarUsuarioSig(NodoMatriz* nodo, string emp);
 
 };
 
