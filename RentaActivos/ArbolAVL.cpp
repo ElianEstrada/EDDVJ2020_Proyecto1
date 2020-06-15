@@ -108,6 +108,10 @@ NodoAVL* ArbolAVL::eliminar(int numero, NodoAVL*& raiz) {
 		else if(numero > raiz->numero){
 			raiz->hijoDer = eliminar(numero, raiz->hijoDer);
 
+			int mayor = mayorHijo(alturaDer(raiz->hijoDer), alturaIzq(raiz->hijoIzq));
+
+			raiz->altura = mayor + 1;
+
 			if (facEquilibrio(alturaIzq(raiz->hijoIzq), alturaDer(raiz->hijoDer)) == 2) {
 
 				/*if (numero > raiz->hijoDer->numero) {
@@ -124,6 +128,10 @@ NodoAVL* ArbolAVL::eliminar(int numero, NodoAVL*& raiz) {
 		}
 		else {
 			raiz->hijoIzq = eliminar(numero, raiz->hijoIzq);
+
+			int mayor = mayorHijo(alturaDer(raiz->hijoDer), alturaIzq(raiz->hijoIzq));
+
+			raiz->altura = mayor + 1;
 
 			if (facEquilibrio(alturaDer(raiz->hijoDer), alturaIzq(raiz->hijoIzq)) == 2) {
 

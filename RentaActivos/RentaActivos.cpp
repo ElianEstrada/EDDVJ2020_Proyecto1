@@ -1,7 +1,8 @@
 
 #include <iostream>
+#include <cstdlib>
+#include <time.h>
 #include "MenuPrincipal.h"
-#include "Activo.h"
 
 
 using namespace std;
@@ -30,11 +31,7 @@ using namespace std;
 int main()
 {
 
-    Activo* a1 = new Activo("Elian", "Guapo");
-    Activo* a2 = new Activo("Alex", "Meh");
-    Activo* a3 = new Activo("Daniel", "Ufff");
-
-    cout << a1->getID() << " " << a2->getID() << " " << a3->getID() << endl;
+    srand(time(NULL));
 
     cin.ignore();
     cin.get();
