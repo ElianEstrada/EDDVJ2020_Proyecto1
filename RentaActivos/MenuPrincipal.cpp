@@ -144,3 +144,17 @@ void menuUsuario(string nombre) {
     eleccion(false, opcion);
 
 }
+
+
+//Dejar todo en Mayusculas
+
+string strCast(string cadena) {
+
+    string aux;
+    for (int i = 0; i < cadena.length(); i++) {
+        aux += toupper(cadena[i]);
+    }
+
+    return aux;
+
+}

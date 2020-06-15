@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <time.h>
 #include "MenuPrincipal.h"
-
+#include "MatrizDispersa.h"
 
 using namespace std;
 
@@ -32,6 +32,17 @@ int main()
 {
 
     srand(time(NULL));
+
+    MatrizDispersa* matriz = new MatrizDispersa();
+
+    matriz->insertarUsuario(new Usuario("Elian", "eliadelyn", "pinponpan"), "guatemala", "libreria h45");
+    matriz->insertarUsuario(new Usuario("Alex", "eliadelyn", "pinponpan"), "sacatepequez", "max");
+    matriz->insertarUsuario(new Usuario("Daniel", "eliadelyn", "pinponpan"), "suchitepequez", "walmart");
+    matriz->insertarUsuario(new Usuario("Allan", "eliadelyn", "pinponpan"), "jalapa", "max");
+    matriz->insertarUsuario(new Usuario("Sergio", "eliadelyn", "pinponpan"), "zacapa", "libreria h45");
+    matriz->insertarUsuario(new Usuario("Madelyn", "eliadelyn", "pinponpan"), "zacapa", "walmart");
+
+    //menuPrincipal();
 
     cin.ignore();
     cin.get();

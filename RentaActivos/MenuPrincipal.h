@@ -8,3 +8,5 @@ void menuPrincipal();
 void login(bool bandera);
 void adminMenu();
 void menuUsuario(string nombre);
+string strCast(string cadena);
+
