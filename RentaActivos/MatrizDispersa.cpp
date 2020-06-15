@@ -5,6 +5,8 @@ MatrizDispersa::MatrizDispersa() {
 	ini = new NodoMatriz("admin");
 }
 
+
+//Metodo poara crear la Cabecera Horizontal si esta no existiera
 NodoMatriz* MatrizDispersa::insertarCabHorizontal(string departamento) {
 
 	NodoMatriz* nuevaCab = new NodoMatriz(departamento);
@@ -23,6 +25,7 @@ NodoMatriz* MatrizDispersa::insertarCabHorizontal(string departamento) {
 }
 
 
+//Método para crear la Cabecera Vertial si esta no existiera
 NodoMatriz* MatrizDispersa::insertarCabVertical(string empresa) {
 	
 	NodoMatriz* nuevaCab = new NodoMatriz(empresa);
@@ -40,35 +43,53 @@ NodoMatriz* MatrizDispersa::insertarCabVertical(string empresa) {
 	return nuevaCab;
 }
 
+
+//Método general para insertar un usuario
 void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, string empresa) {
 
+	//vemos si éxisten las cabeceras
 	NodoMatriz* cabezaDep = buscarDepartamento(departamento);
 	NodoMatriz* cabezaEmp = buscarEmpresa(empresa);
 
 
+
+	//si ambas son nulas (es decir que no exisiten)
 	if (cabezaDep == nullptr || cabezaEmp == nullptr) {
 
+		//si la Horizontal no existe la creamos
 		if (cabezaDep == nullptr) {
 			cabezaDep = insertarCabHorizontal(departamento);
 		}
+
+		//si la Vertial no existe la creamos
 		if (cabezaEmp == nullptr) {
 			cabezaEmp = insertarCabVertical(empresa);
 		}
 
+		//Insertamos a final de ambas listas.
 		insertarAlFinal(usuario, cabezaDep, cabezaEmp);
 
 	}
+
+	//Si los siguientes de las cabeceras son nulos (es decir son los ultimos de sus listas respecitvas
 	else if (cabezaDep->getSig() == nullptr || cabezaEmp->getAbajo() == nullptr) {
 
+		//verfíficamos si ya existe un usuario en esta posición
 		NodoMatriz* usuarioActual = existe(cabezaDep, empresa);
 
+		//si ambos son nulos es decir ambos son los últimos de sus listas
 		if (cabezaDep->getSig() == nullptr && cabezaEmp->getAbajo() == nullptr) {
 
+			//verificamos que el nombre no se repita
 			if (existeNombre(usuarioActual, usuario->getNombre())) {
+
+				//si existe un usuario en esa posición
 				if (usuarioActual != nullptr) {
+					//insertamos atras de dicho usuario
 					insertarAtras(usuario, usuarioActual);
 				}
 				else {
+					//Si no insertamos al final de cada lista respecitivamente
 					insertarAlFinal(usuario, cabezaDep, cabezaEmp);
 				}
 			}
@@ -77,13 +98,20 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 			}
 
 		}
+
+		//si solamente la cabecera Horizontal es la última
 		else if (cabezaDep->getSig() == nullptr) {
 
+			//verificamos que no exista el nombre
 			if (existeNombre(usuarioActual, usuario->getNombre())) {
+
+				//si existe un usuario en esa posición
 				if (usuarioActual != nullptr) {
+					//insertamos atras de ese usuario.
 					insertarAtras(usuario, usuarioActual);
 				}
 				else {
+					//Insertamos al Final de la lista de Empresas
 					insertarAlFinalEmp(usuario, cabezaEmp, departamento);
 				}
 			}
@@ -94,11 +122,18 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 		}
 		else {
 
+			//Si solamente la Cabecera Vertial es la ultima
+
+			//Verifico que no se repita el nombre
 			if (existeNombre(usuarioActual, usuario->getNombre())) {
+
+				//si existe un usuario en esa posición
 				if (usuarioActual != nullptr) {
+					//inserto atras de ese nodo;
 					insertarAtras(usuario, usuarioActual);
 				}
 				else {
+					//inserto al final de la lista de departamentos.
 					insertarAlFinalDep(usuario, cabezaDep, empresa);
 				}
 			}
@@ -111,13 +146,21 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 	}
 	else {
 
+		//Si son cabeceras que estan rodeadas por otras
+
+		//Vemos si ya hay un usuario en esa posición
 		NodoMatriz* usuarioActual = existe(cabezaDep, empresa);
 
+		//verificamos que no exista el nombre
 		if (existeNombre(usuarioActual, usuario->getNombre())) {
+
+			//si ya existe un usuario en esa posición
 			if (usuarioActual != nullptr) {
+				//insertamos atras de dicho usuario.
 				insertarAtras(usuario, usuarioActual);
 			}
 			else {
+				//insetamos Enmedio
 				insertarEnmedio(usuario, cabezaDep, cabezaEmp);
 			}
 		}
@@ -129,6 +172,8 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 
 }
 
+
+//Metodo para insetar al Final de ambas listas
 void MatrizDispersa::insertarAlFinal(Usuario* usuario, NodoMatriz* cabeceraH, NodoMatriz* cabeceraV) {
 
 	NodoMatriz* nuevoUsuario = new NodoMatriz(usuario);
@@ -155,12 +200,15 @@ void MatrizDispersa::insertarAlFinal(Usuario* usuario, NodoMatriz* cabeceraH, No
 }
 
 
+//Metodo para insetar al Final de la lista Empresa
 void MatrizDispersa::insertarAlFinalEmp(Usuario* usuario, NodoMatriz* cabeceraV, string departamento) {
 
 	NodoMatriz* nuevoUsuario = new NodoMatriz(usuario);
 
 	NodoMatriz* auxV = cabeceraV;
 
+
+	//Insertamos al final de la lista de Empresa
 	while (auxV->getSig() != nullptr) {
 
 		auxV = auxV->getSig();
@@ -169,15 +217,20 @@ void MatrizDispersa::insertarAlFinalEmp(Usuario* usuario, NodoMatriz* cabeceraV,
 	auxV->setSig(nuevoUsuario);
 	nuevoUsuario->setAnt(auxV);
 
+
+	//Veríficamos si el nodo que ingresamos se deberá ingrasar al medio en Departamentos o al Final
 	NodoMatriz* userAbajo = buscarUsuarioAbajo(cabeceraV->getSig(), departamento);
 
+	//Si hay un elemento debajo de donde tendría que ir nuestro nodo
 	if (userAbajo != nullptr) {
+		//insertamos al Medio de ese nodo que esta abajo.
 		insertarAlMedio(nuevoUsuario, userAbajo, true);
 	}
 	else {
 
 		NodoMatriz* auxH = ini;
 
+		//Insertamos al Final de la lista Departamento.
 		while (auxH->getSig() != nullptr) {
 
 			auxH = auxH->getSig();
@@ -197,12 +250,15 @@ void MatrizDispersa::insertarAlFinalEmp(Usuario* usuario, NodoMatriz* cabeceraV,
 
 }
 
+
+//Metodo para insetar al final de la lista departamento
 void MatrizDispersa::insertarAlFinalDep(Usuario* usuario, NodoMatriz* cabeceraH, string empresa) {
 
 	NodoMatriz* nuevoUsuario = new NodoMatriz(usuario);
 
 	NodoMatriz* aux = cabeceraH;
 
+	//insertamos al final de la ista departamento
 	while (aux->getAbajo() != nullptr) {
 
 		aux = aux->getAbajo();
@@ -211,14 +267,19 @@ void MatrizDispersa::insertarAlFinalDep(Usuario* usuario, NodoMatriz* cabeceraH,
 	aux->setAbajo(nuevoUsuario);
 	nuevoUsuario->setArriba(aux);
 
+	//Vemos si hay algún usuario que esta a la derecha de donde devería ir nuesto nuevo usuario
 	NodoMatriz* userSig = buscarUsuarioSig(cabeceraH->getSig(), empresa);
+
+	//si existe tal usuario
 	if (userSig != nullptr) {
+		//insertamos al medio de ese nodo que esta a la derecha
 		insertarAlMedio(nuevoUsuario, userSig, false);
 	}
 	else {
 
 		NodoMatriz* auxV = ini;
 
+		//Ingresamos al Final de la lista Empresa
 		while (auxV->getAbajo() != nullptr) {
 
 			auxV = auxV->getAbajo();
@@ -238,6 +299,7 @@ void MatrizDispersa::insertarAlFinalDep(Usuario* usuario, NodoMatriz* cabeceraH,
 }
 
 
+//Metodo para saber en donde insertar el nuevo Usuario.
 void MatrizDispersa::insertarEnmedio(Usuario* usuario, NodoMatriz* cabeceraH, NodoMatriz* cabeceraV) {
 
 	NodoMatriz* nuevoUsuario = new NodoMatriz(usuario);
@@ -245,11 +307,13 @@ void MatrizDispersa::insertarEnmedio(Usuario* usuario, NodoMatriz* cabeceraH, No
 	NodoMatriz* auxV = cabeceraV;
 	NodoMatriz* auxH = cabeceraH;
 
+	//verifica las cabeceras de cada usuario para saber arriba de quien insertar el nuevo usuario.
 	while (auxH->getAbajo() != nullptr && !estaAbajo(buscarCabeceraV(auxH), cabeceraV->getCabecera())) {
 		
 		auxH = auxH->getAbajo();
 	}
 
+	//aqui vemos si se iserta al medio o simplemente al final.
 	if (estaAbajo(buscarCabeceraV(auxH), cabeceraV->getCabecera())) {
 
 		insertarAlMedio(nuevoUsuario, auxH, true);
@@ -262,12 +326,13 @@ void MatrizDispersa::insertarEnmedio(Usuario* usuario, NodoMatriz* cabeceraH, No
 
 	}
 
-
+	//verificiar las cabeceras de cada usuario para saber antes de quien insertar el nuveo usuario
 	while (auxV->getSig() != nullptr && !estaIzquierda(buscarCabeceraH(auxV), cabeceraH->getCabecera())) {
 
 		auxV = auxV->getSig();
 	}
 
+	//aqui vemos si se inserta al medio o simplemente al final
 	if (estaIzquierda(buscarCabeceraH(auxV), cabeceraH->getCabecera())) {
 		insertarAlMedio(nuevoUsuario, auxV, false);
 	}
@@ -281,6 +346,7 @@ void MatrizDispersa::insertarEnmedio(Usuario* usuario, NodoMatriz* cabeceraH, No
 }
 
 
+//Metodo para insertar al Medio
 void MatrizDispersa::insertarAlMedio(NodoMatriz* nuevoUsuario, NodoMatriz* abajo, bool bandera) {
 
 	if (bandera) {
@@ -299,6 +365,7 @@ void MatrizDispersa::insertarAlMedio(NodoMatriz* nuevoUsuario, NodoMatriz* abajo
 }
 
 
+//Metodo para insertar atras de un usuario que ya este en una posición.
 void MatrizDispersa::insertarAtras(Usuario* nuevoUsuario, NodoMatriz* usuarioActual) {
 
 	NodoMatriz* nuevo = new NodoMatriz(nuevoUsuario);
@@ -315,6 +382,8 @@ void MatrizDispersa::insertarAtras(Usuario* nuevoUsuario, NodoMatriz* usuarioAct
 
 }
 
+
+//Metodo para obetener las cabeceras Vertiales de un usuario.
 NodoMatriz* MatrizDispersa::buscarCabeceraV(NodoMatriz* usuarioActual) {
 
 	NodoMatriz* aux = usuarioActual;
@@ -328,20 +397,25 @@ NodoMatriz* MatrizDispersa::buscarCabeceraV(NodoMatriz* usuarioActual) {
 
 }
 
+//Metodo para saber que usario esta debajo de donde se debe insertar el nuevo usuario
 NodoMatriz* MatrizDispersa::buscarUsuarioAbajo(NodoMatriz* nodo, string dep) {
 
 	NodoMatriz* aux = nodo;
 
 	if (aux != nullptr) {
+
+		//recorremos la lista de de usuarios en una Empresa
 		while (aux->getSig() != nullptr) {
 
 			aux = aux->getSig();
 		}
 
+		//vemos si la cabecera del ultimo usuario es igual al departamenteo en donde vamos a insertar
 		if (dep == buscarCabeceraH(aux)->getCabecera()) {
 			return aux;
 		}
 		else {
+			//volvemos a llamar a la función con la empresa siguiente
 			return buscarUsuarioAbajo(nodo->getAbajo(), dep);
 		}
 	}
@@ -351,6 +425,8 @@ NodoMatriz* MatrizDispersa::buscarUsuarioAbajo(NodoMatriz* nodo, string dep) {
 
 }
 
+
+//Metodo que devuleve la cabecera de un usuario
 NodoMatriz* MatrizDispersa::buscarCabeceraH(NodoMatriz* usuarioActual) {
 
 	NodoMatriz* aux = usuarioActual;
@@ -364,20 +440,25 @@ NodoMatriz* MatrizDispersa::buscarCabeceraH(NodoMatriz* usuarioActual) {
 
 }
 
+
+//Metodo para saber que usario esta a la derecha de donde se debe insertar el nuevo usuario
 NodoMatriz* MatrizDispersa::buscarUsuarioSig(NodoMatriz* nodo, string emp) {
 
 	NodoMatriz* aux = nodo;
 
 	if (aux != nullptr) {
+
+		//recorremos la lista de de usuarios en un Departamento
 		while (aux->getAbajo() != nullptr) {
 
 			aux = aux->getAbajo();
 		}
-
+		//vemos si la cabecera del ultimo usuario es igual a la empresa en donde vamos a insertar
 		if (emp == buscarCabeceraV(aux)->getCabecera()) {
 			return aux;
 		}
 		else {
+			//volvemos a llamar a la función con el departamento siguiente
 			return buscarUsuarioSig(nodo->getSig(), emp);
 		}
 	}
@@ -387,6 +468,8 @@ NodoMatriz* MatrizDispersa::buscarUsuarioSig(NodoMatriz* nodo, string emp) {
 
 }
 
+
+//Metodo para ver si ya existe un departamento
 NodoMatriz* MatrizDispersa::buscarDepartamento(string departamento) {
 
 	NodoMatriz* aux = ini;
@@ -403,6 +486,7 @@ NodoMatriz* MatrizDispersa::buscarDepartamento(string departamento) {
 
 }
 
+//Metodo para ver si ya existe una empresa
 NodoMatriz* MatrizDispersa::buscarEmpresa(string empresa) {
 
 	NodoMatriz* aux = ini;
@@ -419,12 +503,16 @@ NodoMatriz* MatrizDispersa::buscarEmpresa(string empresa) {
 	return nullptr;
 }
 
+
+//Metodo para ver si ya existe un usuario en una posición
 NodoMatriz* MatrizDispersa::existe(NodoMatriz* cabezaH, string empresa) {
 
 	NodoMatriz* aux = cabezaH;
 
+	//Recorremos la lista de usuarios de un departamento
 	while (aux->getAbajo() != nullptr) {
 
+		//vemos si el nombre de la empresa coincide con el nombre de la cabecera de ese usuario
 		if (empresa == buscarCabeceraV(aux->getAbajo())->getCabecera()) {
 			return aux->getAbajo();
 		}
@@ -437,6 +525,7 @@ NodoMatriz* MatrizDispersa::existe(NodoMatriz* cabezaH, string empresa) {
 
 }
 
+//Metodo para ver si ya existe un nombre en el mismo lugar.
 bool MatrizDispersa::existeNombre(NodoMatriz* usuarios, string nombre) {
 
 	NodoMatriz* aux = usuarios;
@@ -457,10 +546,12 @@ bool MatrizDispersa::existeNombre(NodoMatriz* usuarios, string nombre) {
 }
 
 
+//Metodo para saber si un nodo esta abajo del que deseamos insertar
 bool MatrizDispersa::estaAbajo(NodoMatriz* nodo, string empresa) {
 
 	NodoMatriz* aux = nodo;
 
+	//mietras el encabezado no sea igual que la empresa buscada y no se llegue al primero
 	while (aux->getCabecera() != empresa && aux->getArriba() != nullptr) {
 
 		aux = aux->getArriba();
@@ -474,10 +565,12 @@ bool MatrizDispersa::estaAbajo(NodoMatriz* nodo, string empresa) {
 }
 
 
+//Metodo para saber si un nodo esta a la izquierda de donde queremos ingresar el usuario
 bool MatrizDispersa::estaIzquierda(NodoMatriz* nodo, string departamento) {
 
 	NodoMatriz* aux = nodo;
 
+	//mietras la cabecera horizontal sea diferente al departamento y no se llegue al primero
 	while (aux->getCabecera() != departamento && aux->getAnt() != nullptr) {
 
 		aux = aux->getAnt();
