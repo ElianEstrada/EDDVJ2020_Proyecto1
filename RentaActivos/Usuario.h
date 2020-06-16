@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include "ArbolAVL.h"
 
 using namespace std;
 
@@ -11,6 +12,8 @@ class Usuario
 	string nombre;
 	string usuario;
 	string contraseña;
+	ArbolAVL* arbol;
+
 
 public:
 	Usuario(string nombre, string usuario, string contraseña);
@@ -20,5 +23,7 @@ public:
 	string getUsuario();
 	void setContraseña(string contraseña);
 	string getContraseña();
+	void setArbol(ArbolAVL* arbol);
+	ArbolAVL* getArbol();
 };
 

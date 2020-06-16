@@ -6,6 +6,7 @@ Usuario::Usuario(string nombre, string usuario, string contraseña) {
 	setNumero(nombre);
 	setUsuario(usuario);
 	setContraseña(contraseña);
+	setArbol(new ArbolAVL());
 }
 
 
@@ -31,4 +32,12 @@ void Usuario::setContraseña(string contraseña) {
 
 string Usuario::getContraseña() {
 	return contraseña;
+}
+
+void Usuario::setArbol(ArbolAVL* arbol) {
+	this->arbol = arbol;
+}
+
+ArbolAVL* Usuario::getArbol() {
+	return arbol;
 }

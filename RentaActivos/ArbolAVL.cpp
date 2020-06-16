@@ -7,22 +7,22 @@ ArbolAVL::ArbolAVL() {
 	raiz = nullptr;
 }
 
-void ArbolAVL::insertar(int numero) {
+void ArbolAVL::insertar(Activo* activo) {
 
-	insertar(numero, raiz);
+	insertar(activo, raiz);
 
 }
 
-void ArbolAVL::insertar(int numero, NodoAVL* &raiz) {
+void ArbolAVL::insertar(Activo* activo, NodoAVL* &raiz) {
 
 	if (raiz != nullptr) {
 
-		if (numero > raiz->numero) {
-			if (raiz->hijoDer != nullptr) {
-				insertar(numero, raiz->hijoDer);
-				if (facEquilibrio(alturaDer(raiz->hijoDer), alturaIzq(raiz->hijoIzq)) == 2) {
+		if (activo->getID() > raiz->getActivo()->getID()) {
+			if (raiz->getHijoDer() != nullptr) {
+				insertar(activo, raiz->getHijoDer());
+				if (facEquilibrio(alturaDer(raiz->getHijoDer()), alturaIzq(raiz->getHijoIzq())) == 2) {
 
-					if (numero > raiz->hijoDer->numero) {
+					if (activo->getID() > raiz->getHijoDer()->getActivo()->getID()) {
 						raiz = simpleIzq(raiz);
 					}
 					else {
@@ -31,15 +31,15 @@ void ArbolAVL::insertar(int numero, NodoAVL* &raiz) {
 				}
 			}
 			else {
-				raiz->hijoDer = new NodoAVL(numero);
+				raiz->setHijoDer(new NodoAVL(activo));
 			}
 		}
-		else if(numero < raiz->numero){
-			if (raiz->hijoIzq != nullptr) {
-				insertar(numero, raiz->hijoIzq);
+		else if(activo->getID() < raiz->getActivo()->getID()){
+			if (raiz->getHijoIzq() != nullptr) {
+				insertar(activo, raiz->getHijoIzq());
 
-				if (facEquilibrio(alturaIzq(raiz->hijoIzq), alturaDer(raiz->hijoDer)) == 2) {
-					if (numero < raiz->hijoIzq->numero) {
+				if (facEquilibrio(alturaIzq(raiz->getHijoIzq()), alturaDer(raiz->getHijoDer())) == 2) {
+					if (activo->getID() < raiz->getHijoIzq()->getActivo()->getID()) {
 						raiz = simpleDer(raiz);
 					}
 					else {
@@ -49,48 +49,47 @@ void ArbolAVL::insertar(int numero, NodoAVL* &raiz) {
 				}
 			}
 			else {
-				raiz->hijoIzq = new NodoAVL(numero);
+				raiz->setHijoIzq(new NodoAVL(activo));
 			}
 		}
 
-		int mayor = mayorHijo(alturaDer(raiz->hijoDer), alturaIzq(raiz->hijoIzq));
+		int mayor = mayorHijo(alturaDer(raiz->getHijoDer()), alturaIzq(raiz->getHijoIzq()));
 
-		raiz->altura = mayor + 1;
-
+		raiz->setAltura(mayor + 1);
 	}
 	else {
-		raiz = new NodoAVL(numero);
+		raiz = new NodoAVL(activo);
 	}
 
 }
 
 
-void ArbolAVL::eliminar(int numero) {
-	raiz = eliminar(numero, raiz);
+void ArbolAVL::eliminar(string id) {
+	raiz = eliminar(id, raiz);
 }
 
-NodoAVL* ArbolAVL::eliminar(int numero, NodoAVL*& raiz) {
+NodoAVL* ArbolAVL::eliminar(string id, NodoAVL*& raiz) {
 
 	if (raiz != nullptr) {
 
-		if (raiz->numero == numero) {
+		if (raiz->getActivo()->getID() == id) {
 			if (esHoja(raiz)) {
 				raiz = nullptr;
 				return raiz;
 			}
-			else if(raiz->hijoDer == nullptr && raiz->hijoIzq != nullptr){
-				return raiz->hijoIzq;
+			else if(raiz->getHijoDer() == nullptr && raiz->getHijoIzq() != nullptr){
+				return raiz->getHijoIzq();
 			}
-			else if (raiz->hijoIzq == nullptr && raiz->hijoDer != nullptr) {
-				return raiz->hijoDer;
+			else if (raiz->getHijoIzq() == nullptr && raiz->getHijoDer() != nullptr) {
+				return raiz->getHijoDer();
 			}
 			else {
-				NodoAVL* masDerecha = buscarMasDerecha(raiz->hijoIzq);
+				NodoAVL* masDerecha = buscarMasDerecha(raiz->getHijoIzq());
 
 				if (masDerecha != nullptr) {
-					raiz = eliminar(masDerecha->numero, raiz);
-					raiz->numero = masDerecha->numero;
-					if (facEquilibrio(alturaIzq(raiz->hijoIzq), alturaDer(raiz->hijoDer)) == 2) {
+					raiz = eliminar(masDerecha->getActivo()->getID(), raiz);
+					raiz->getActivo()->setID(masDerecha->getActivo()->getID());
+					if (facEquilibrio(alturaIzq(raiz->getHijoIzq()), alturaDer(raiz->getHijoDer())) == 2) {
 
 						/*if (numero > raiz->hijoDer->numero) {
 							raiz = simpleDer(raiz);
@@ -105,14 +104,14 @@ NodoAVL* ArbolAVL::eliminar(int numero, NodoAVL*& raiz) {
 				}
 			}
 		}
-		else if(numero > raiz->numero){
-			raiz->hijoDer = eliminar(numero, raiz->hijoDer);
+		else if(id > raiz->getActivo()->getID()){
+			raiz->setHijoDer(eliminar(id, raiz->getHijoDer()));
 
-			int mayor = mayorHijo(alturaDer(raiz->hijoDer), alturaIzq(raiz->hijoIzq));
+			int mayor = mayorHijo(alturaDer(raiz->getHijoDer()), alturaIzq(raiz->getHijoIzq()));
 
-			raiz->altura = mayor + 1;
+			raiz->setAltura(mayor + 1);
 
-			if (facEquilibrio(alturaIzq(raiz->hijoIzq), alturaDer(raiz->hijoDer)) == 2) {
+			if (facEquilibrio(alturaIzq(raiz->getHijoIzq()), alturaDer(raiz->getHijoDer())) == 2) {
 
 				/*if (numero > raiz->hijoDer->numero) {
 					raiz = simpleDer(raiz);
@@ -127,13 +126,13 @@ NodoAVL* ArbolAVL::eliminar(int numero, NodoAVL*& raiz) {
 			return raiz;
 		}
 		else {
-			raiz->hijoIzq = eliminar(numero, raiz->hijoIzq);
+			raiz->setHijoIzq(eliminar(id, raiz->getHijoIzq()));
 
-			int mayor = mayorHijo(alturaDer(raiz->hijoDer), alturaIzq(raiz->hijoIzq));
+			int mayor = mayorHijo(alturaDer(raiz->getHijoDer()), alturaIzq(raiz->getHijoIzq()));
 
-			raiz->altura = mayor + 1;
+			raiz->setAltura(mayor + 1);
 
-			if (facEquilibrio(alturaDer(raiz->hijoDer), alturaIzq(raiz->hijoIzq)) == 2) {
+			if (facEquilibrio(alturaDer(raiz->getHijoDer()), alturaIzq(raiz->getHijoIzq())) == 2) {
 
 				/*if (numero > raiz->hijoDer->numero) {
 					raiz = simpleDer(raiz);
@@ -155,7 +154,7 @@ NodoAVL* ArbolAVL::eliminar(int numero, NodoAVL*& raiz) {
 
 }
 
-
+/*
 void ArbolAVL::actualizar(int numero, int numeroNuevo) {
 
 	actualizar(numero, numeroNuevo, raiz);
@@ -200,32 +199,32 @@ void ArbolAVL::actualizar(int numero, int numeroNuevo, NodoAVL* nodo) {
 		cout << "No hay nada que modificar"<<endl;
 	}
 
-}
+}*/
 
 
-void ArbolAVL::buscar(int numero) {
+void ArbolAVL::buscar(string id) {
 
-	NodoAVL* busqueda = buscar(numero, raiz);
+	NodoAVL* busqueda = buscar(id, raiz);
 	if (busqueda != nullptr) {
-		cout << "El valor [" << numero << "] encontrado fue: " << busqueda->numero << endl;
+		cout << "El valor [" << id << "] encontrado fue: " << busqueda->getActivo()->getID() << endl;
 	}
 	else {
-		cout << "El valor[" << numero << "] buscado no existe" << endl;
+		cout << "El valor[" << id << "] buscado no existe" << endl;
 	}
 }
 
-NodoAVL* ArbolAVL::buscar(int numero, NodoAVL* nodo) {
+NodoAVL* ArbolAVL::buscar(string id, NodoAVL* nodo) {
 
 	if (nodo != nullptr) {
 
-		if (nodo->numero == numero) {
+		if (nodo->getActivo()->getID() == id) {
 			return nodo;
 		}
-		else if (numero > nodo->numero) {
-			buscar(numero, nodo->hijoDer);
+		else if (id > nodo->getActivo()->getID()) {
+			buscar(id, nodo->getHijoDer());
 		}
 		else {
-			buscar(numero, nodo->hijoIzq);
+			buscar(id, nodo->getHijoIzq());
 		}
 
 	}
@@ -246,9 +245,9 @@ void ArbolAVL::preOrden() {
 void ArbolAVL::preOrden(NodoAVL* nodo) {
 
 	if (nodo != nullptr) {
-		cout << nodo->numero << " ";
-		preOrden(nodo->hijoIzq);
-		preOrden(nodo->hijoDer);
+		cout << nodo->getActivo()->getID() << " ";
+		preOrden(nodo->getHijoIzq());
+		preOrden(nodo->getHijoDer());
 	}
 
 }
@@ -257,14 +256,14 @@ void ArbolAVL::preOrden(NodoAVL* nodo) {
 int ArbolAVL::alturaDer(NodoAVL* der) {
 
 	if(der != nullptr)
-		return der->altura;
+		return der->getAltura();
 	return -1;
 }
 
 int ArbolAVL::alturaIzq(NodoAVL* izq) {
 
 	if(izq != nullptr)
-		return izq->altura;
+		return izq->getAltura();
 	return -1;
 }
 
@@ -284,9 +283,9 @@ NodoAVL* ArbolAVL::buscarMasDerecha(NodoAVL* nodo) {
 
 	NodoAVL* aux = nodo;
 
-	while (aux->hijoDer != nullptr) {
+	while (aux->getHijoDer() != nullptr) {
 
-		aux = aux->hijoDer;
+		aux = aux->getHijoDer();
 	}
 
 	return aux;
@@ -297,9 +296,9 @@ NodoAVL* ArbolAVL::buscarMasIzquierda(NodoAVL* nodo) {
 
 	NodoAVL* aux = nodo;
 
-	while (aux->hijoIzq != nullptr) {
+	while (aux->getHijoIzq() != nullptr) {
 
-		aux = aux->hijoIzq;
+		aux = aux->getHijoIzq();
 	}
 
 	return aux;
@@ -308,26 +307,26 @@ NodoAVL* ArbolAVL::buscarMasIzquierda(NodoAVL* nodo) {
 
 NodoAVL* ArbolAVL::simpleDer(NodoAVL* nodo) {
 
-	NodoAVL* aux = nodo->hijoIzq;
+	NodoAVL* aux = nodo->getHijoIzq();
 
-	nodo->hijoIzq = aux->hijoDer;
-	aux->hijoDer = nodo;
+	nodo->setHijoIzq(aux->getHijoDer());
+	aux->setHijoDer(nodo);
 
-	nodo->altura = mayorHijo(alturaDer(nodo->hijoDer), alturaIzq(nodo->hijoIzq)) + 1; 
-	aux->altura = mayorHijo(alturaDer(aux->hijoDer), alturaIzq(aux->hijoIzq)) + 1;
+	nodo->setAltura(mayorHijo(alturaDer(nodo->getHijoDer()), alturaIzq(nodo->getHijoIzq())) + 1);
+	aux->setAltura(mayorHijo(alturaDer(aux->getHijoDer()), alturaIzq(aux->getHijoIzq())) + 1);
 
 	return aux;
 }
 
 NodoAVL* ArbolAVL::simpleIzq(NodoAVL* nodo) {
 
-	NodoAVL* aux = nodo->hijoDer;
+	NodoAVL* aux = nodo->getHijoDer();
 
-	nodo->hijoDer = aux->hijoIzq;
-	aux->hijoIzq = nodo;
+	nodo->setHijoDer(aux->getHijoIzq());
+	aux->setHijoIzq(nodo);
 
-	nodo->altura = mayorHijo(alturaDer(nodo->hijoDer), alturaIzq(nodo->hijoIzq)) + 1;
-	aux->altura = mayorHijo(alturaDer(aux->hijoDer), alturaIzq(aux->hijoIzq)) + 1;
+	nodo->setAltura(mayorHijo(alturaDer(nodo->getHijoDer()), alturaIzq(nodo->getHijoIzq())) + 1);
+	aux->setAltura(mayorHijo(alturaDer(aux->getHijoDer()), alturaIzq(aux->getHijoIzq())) + 1);
 
 	return aux;
 
@@ -335,14 +334,14 @@ NodoAVL* ArbolAVL::simpleIzq(NodoAVL* nodo) {
 
 NodoAVL* ArbolAVL::dobleDer(NodoAVL* nodo) {
 
-	nodo->hijoIzq = simpleIzq(nodo->hijoIzq);
+	nodo->setHijoIzq(simpleIzq(nodo->getHijoIzq()));
 	return simpleDer(nodo);
 
 }
 
 NodoAVL* ArbolAVL::dobleIzq(NodoAVL* nodo) {
 
-	nodo->hijoDer = simpleDer(nodo->hijoDer);
+	nodo->setHijoDer(simpleDer(nodo->getHijoDer()));
 	return simpleIzq(nodo);
 }
 
@@ -351,7 +350,14 @@ NodoAVL* ArbolAVL::dobleIzq(NodoAVL* nodo) {
 bool ArbolAVL::esHoja(NodoAVL* nodo){
 
 	if (nodo != nullptr) {
-		return nodo->hijoDer == nullptr && nodo->hijoIzq == nullptr;
+		return nodo->getHijoDer() == nullptr && nodo->getHijoIzq() == nullptr;
 	}
 
+}
+
+
+void ArbolAVL::activoEliminado(Activo* activo) {
+
+	cout << "\nActivo Eliminado: " << endl;
+	cout << "Id: " << activo->getID() << endl << "Nombre: " << activo->getNombre() << endl << "Descripción: " << activo->getDescripcion() << endl;
 }
