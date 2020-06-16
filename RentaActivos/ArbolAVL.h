@@ -30,7 +30,7 @@ public:
 	NodoAVL* dobleDer(NodoAVL* nodo);
 	NodoAVL* dobleIzq(NodoAVL* nodo);
 
-	void preOrden();
+	bool preOrden();
 	void preOrden(NodoAVL* nodo);
 
 	int alturaDer(NodoAVL* der);

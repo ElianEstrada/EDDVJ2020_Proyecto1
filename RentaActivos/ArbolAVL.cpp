@@ -234,10 +234,15 @@ NodoAVL* ArbolAVL::buscar(string id, NodoAVL* nodo) {
 
 }
 
-void ArbolAVL::preOrden() {
+bool ArbolAVL::preOrden() {
 
-	preOrden(raiz);
-	cout << endl << endl;
+	if (raiz != nullptr) {
+		preOrden(raiz);
+		return true;
+	}
+	else {
+		return false;
+	}
 
 }
 
@@ -245,7 +250,7 @@ void ArbolAVL::preOrden() {
 void ArbolAVL::preOrden(NodoAVL* nodo) {
 
 	if (nodo != nullptr) {
-		cout << nodo->getActivo()->getID() << " ";
+		cout << "\n>> ID = "<< nodo->getActivo()->getID() << "; Nombre = " << nodo->getActivo()->getNombre() << "; Descripcion = " << nodo->getActivo()->getDescripcion();
 		preOrden(nodo->getHijoIzq());
 		preOrden(nodo->getHijoDer());
 	}

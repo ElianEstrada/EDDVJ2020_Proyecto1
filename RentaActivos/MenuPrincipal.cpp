@@ -7,9 +7,13 @@ NodoMatriz* usuarioActual = nullptr;
 
 MatrizDispersa* matriz = new MatrizDispersa();
 
+
 //Menu Principal
 void menuPrincipal()
 {
+	matriz->insertarUsuario(new Usuario("ELIAN", "ELIADELYN", "PINPONPAN"), "GUATEMALA", "MAX");
+	matriz->insertarUsuario(new Usuario("ALEX", "ALFM98", "1234"), "GUATEMALA", "WALMART");
+
 	system("cls");
 	char opcion;
 
@@ -139,9 +143,24 @@ void eleccion(bool bandera, char opcion) {
 
 			menuUsuario(usuarioActual->getUsuario()->getNombre());
 		}
-
 		break;
 	case '2':
+
+		if (bandera) {
+
+		}
+		else {
+			system("cls");
+			cout << "--------------------ELIMINAR ACTIVO--------------------" << endl;
+			if (!usuarioActual->getUsuario()->getArbol()->preOrden()) {
+				cout << "No hay activos...";
+				cin.ignore();
+				menuUsuario(usuarioActual->getUsuario()->getNombre());
+			}
+			cout << "\nIngrese el ID del activo a eliminar: ";
+			cin.ignore();
+		}
+
 		break;
 	case '3':
 		break;
