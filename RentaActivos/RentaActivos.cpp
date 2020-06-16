@@ -11,8 +11,7 @@ int main()
 
     srand(time(NULL));
 
-    //menuPrincipal();
-
+    menuPrincipal();
 
     cin.ignore();
     cin.get();

@@ -94,7 +94,8 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 				}
 			}
 			else {
-				cout << "No se permiten nombres repetidos en el mismo luegar" << endl;
+				cout << "\nNo se permiten nombres repetidos en el mismo luegar...";
+				cin.ignore();
 			}
 
 		}
@@ -116,7 +117,8 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 				}
 			}
 			else {
-				cout << "No se permiten nombres repetidos en el mismo luegar" << endl;
+				cout << "\nNo se permiten nombres repetidos en el mismo luegar...";
+				cin.ignore();
 			}
 
 		}
@@ -138,7 +140,8 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 				}
 			}
 			else {
-				cout << "No se permiten nombres repetidos en el mismo luegar" << endl;
+				cout << "\nNo se permiten nombres repetidos en el mismo luegar...";
+				cin.ignore();
 			}
 
 		}
@@ -165,7 +168,8 @@ void MatrizDispersa::insertarUsuario(Usuario* usuario, string departamento, stri
 			}
 		}
 		else {
-			cout << "No se permiten nombres repetidos en el mismo luegar" << endl;
+			cout << "\nNo se permiten nombres repetidos en el mismo luegar...";
+			cin.ignore();
 		}
 
 	}
@@ -510,15 +514,17 @@ NodoMatriz* MatrizDispersa::existe(NodoMatriz* cabezaH, string empresa) {
 	NodoMatriz* aux = cabezaH;
 
 	//Recorremos la lista de usuarios de un departamento
-	while (aux->getAbajo() != nullptr) {
+	if (aux != nullptr) {
+		while (aux->getAbajo() != nullptr) {
 
-		//vemos si el nombre de la empresa coincide con el nombre de la cabecera de ese usuario
-		if (empresa == buscarCabeceraV(aux->getAbajo())->getCabecera()) {
-			return aux->getAbajo();
+			//vemos si el nombre de la empresa coincide con el nombre de la cabecera de ese usuario
+			if (empresa == buscarCabeceraV(aux->getAbajo())->getCabecera()) {
+				return aux->getAbajo();
+			}
+
+			aux = aux->getAbajo();
+
 		}
-
-		aux = aux->getAbajo();
-		
 	}
 
 	return nullptr;
