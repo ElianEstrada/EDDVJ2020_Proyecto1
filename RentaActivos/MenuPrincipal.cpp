@@ -1,11 +1,13 @@
 #include "MenuPrincipal.h"
 #include "MatrizDispersa.h"
+#include "ListaTransaccion.h"
 
 const string admin = "admin";
 const string ctrAdmin = "admin";
 NodoMatriz* usuarioActual = nullptr;
 
 MatrizDispersa* matriz = new MatrizDispersa();
+ListaTransaccion* transacciones = new ListaTransaccion();
 
 
 //Menu Principal
@@ -164,7 +166,7 @@ void eleccion(bool bandera, char opcion) {
 		else {
 			system("cls");
 			cout << "--------------------ELIMINAR ACTIVO--------------------" << endl;
-			if (!usuarioActual->getUsuario()->getArbol()->preOrden()) {
+			if (!usuarioActual->getUsuario()->getArbol()->preOrden(true)) {
 				cout << "No hay activos...";
 				cin.ignore();
 				menuUsuario(usuarioActual->getUsuario()->getNombre());
@@ -187,7 +189,7 @@ void eleccion(bool bandera, char opcion) {
 		else {
 			system("cls");
 			cout << "--------------------MODIFICAR ACTIVO--------------------" << endl;
-			if (!usuarioActual->getUsuario()->getArbol()->preOrden()) {
+			if (!usuarioActual->getUsuario()->getArbol()->preOrden(true)) {
 				cout << "No hay activos...";
 				cin.ignore();
 				menuUsuario(usuarioActual->getUsuario()->getNombre());
@@ -231,10 +233,22 @@ void eleccion(bool bandera, char opcion) {
 
 				cout << "\nActivo a Rentar: " << endl;
 				cout << "\n>> ID = " << activoRentado->getActivo()->getID() << "; Nombre = " << activoRentado->getActivo()->getNombre() << "; Descripcion = " << activoRentado->getActivo()->getDescripcion() << endl;
-				activoRentado->getActivo()->setDisponible(false);
-
+				
 				cout << "\nIngrese los dias por rentar: ";
 				cin >> diasRenta;
+				activoRentado->getActivo()->setDisponible(false);
+
+
+				struct tm newtime;
+				time_t now = time(0);
+				localtime_s(&newtime, &now);
+
+				string fecha = to_string(newtime.tm_mday) + "-" + to_string(newtime.tm_mon + 1) + "-" + to_string(newtime.tm_year + 1900);
+
+				transacciones->insertarAlFinal(new Transaccion(activoRentado->getActivo(), usuarioActual->getUsuario()->getNombre(), matriz->buscarCabeceraH(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), matriz->buscarCabeceraV(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), fecha, diasRenta));
+
+				cout << "\nActivo rentado exitosamente...";
+				cin.ignore();
 
 				menuUsuario(usuarioActual->getUsuario()->getNombre());
 			}
@@ -251,8 +265,77 @@ void eleccion(bool bandera, char opcion) {
 
 		break;
 	case '5':
+
+		if (bandera) {
+
+		}
+		else {
+
+			system("cls");
+			cout << "--------------------ACTIVOS RENTADOS--------------------" << endl;
+			if (transacciones->recorrerLista(usuarioActual->getUsuario()->getNombre())) {
+
+				cout << "\nIngrese el ID del activo a devolver: ";
+				getline(cin, idActivo);
+
+				NodoAVL* activoRentado = matriz->catalogoActivos(usuarioActual->getUsuario(), false, idActivo);
+
+				if (activoRentado != nullptr) {
+
+					cout << "\nActivo Devuelto: " << endl;
+					cout << "\n>> ID = " << activoRentado->getActivo()->getID() << "; Nombre = " << activoRentado->getActivo()->getNombre() << "; Descripcion = " << activoRentado->getActivo()->getDescripcion() << endl;
+
+					activoRentado->getActivo()->setDisponible(true);
+
+
+					struct tm newtime;
+					time_t now = time(0);
+					localtime_s(&newtime, &now);
+
+					string fecha = to_string(newtime.tm_mday) + "-" + to_string(newtime.tm_mon + 1) + "-" + to_string(newtime.tm_year + 1900);
+
+					transacciones->insertarAlFinal(new Transaccion(activoRentado->getActivo(), usuarioActual->getUsuario()->getNombre(), matriz->buscarCabeceraH(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), matriz->buscarCabeceraV(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), fecha, diasRenta));
+
+					cout << "\nActivo devuelto exitosamente...";
+					cin.ignore();
+
+					menuUsuario(usuarioActual->getUsuario()->getNombre());
+
+				}
+
+				cin.ignore();
+
+				menuUsuario(usuarioActual->getUsuario()->getNombre());
+
+			}
+			else {
+				menuUsuario(usuarioActual->getUsuario()->getNombre());
+			}
+
+		}
+
 		break;
 	case '6':
+
+		if (bandera) {
+
+		}
+		else {
+
+			system("cls");
+			cout << "--------------------MIS ACTIVOS RENTADOS--------------------" << endl;
+			if (!usuarioActual->getUsuario()->getArbol()->preOrden(false)) {
+				cout << "No hay activos...";
+				cin.ignore();
+				menuUsuario(usuarioActual->getUsuario()->getNombre());
+			}
+
+			cout << "\n\nPresione cualquier tecla para volver...";
+			cin.ignore();
+			menuUsuario(usuarioActual->getUsuario()->getNombre());
+
+		}
+
 		break;
 	case '7':
 

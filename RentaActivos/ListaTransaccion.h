@@ -8,11 +8,16 @@ class ListaTransaccion
 {
 
 
-    NodoTransaccion* ini = nullptr;
-    NodoTransaccion* fin = nullptr;
+    NodoTransaccion* ini;
+    NodoTransaccion* fin;
 
 public:
+    ListaTransaccion();
+
     void insertarAlFinal(Transaccion *transaccion);
+    bool recorrerLista(string usuario);
+    void reporteActivosRentadosUsuario(string usuario);
+    string reporteActivosRentadosUsuario(string dot, string usuario);
     bool estaVacia();
 };
 

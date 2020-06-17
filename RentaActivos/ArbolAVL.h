@@ -32,8 +32,8 @@ public:
 	NodoAVL* dobleDer(NodoAVL* nodo);
 	NodoAVL* dobleIzq(NodoAVL* nodo);
 
-	bool preOrden();
-	void preOrden(NodoAVL* nodo);
+	bool preOrden(bool bandera);
+	void preOrden(NodoAVL* nodo, bool bandera);
 
 	int alturaDer(NodoAVL* der);
 	int alturaIzq(NodoAVL* izq);

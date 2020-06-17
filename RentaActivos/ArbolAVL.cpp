@@ -270,10 +270,10 @@ NodoAVL* ArbolAVL::buscar(string id, NodoAVL* nodo) {
 
 }
 
-bool ArbolAVL::preOrden() {
+bool ArbolAVL::preOrden(bool bandera) {
 
 	if (raiz != nullptr) {
-		preOrden(raiz);
+		preOrden(raiz, bandera);
 		return true;
 	}
 	else {
@@ -283,12 +283,25 @@ bool ArbolAVL::preOrden() {
 }
 
 
-void ArbolAVL::preOrden(NodoAVL* nodo) {
+void ArbolAVL::preOrden(NodoAVL* nodo, bool bandera) {
 
-	if (nodo != nullptr && nodo->getActivo()->getDisponible()) {
-		cout << "\n>> ID = "<< nodo->getActivo()->getID() << "; Nombre = " << nodo->getActivo()->getNombre() << "; Descripcion = " << nodo->getActivo()->getDescripcion();
-		preOrden(nodo->getHijoIzq());
-		preOrden(nodo->getHijoDer());
+	if (bandera) {
+		if (nodo != nullptr && nodo->getActivo()->getDisponible()) {
+			cout << "\n>> ID = " << nodo->getActivo()->getID() << "; Nombre = " << nodo->getActivo()->getNombre() << "; Descripcion = " << nodo->getActivo()->getDescripcion();
+			preOrden(nodo->getHijoIzq(), bandera);
+			preOrden(nodo->getHijoDer(), bandera);
+		}
+	}
+	else {
+		if (nodo != nullptr && !nodo->getActivo()->getDisponible()) {
+			cout << "\n>> ID = " << nodo->getActivo()->getID() << "; Nombre = " << nodo->getActivo()->getNombre() << "; Descripcion = " << nodo->getActivo()->getDescripcion();
+			preOrden(nodo->getHijoIzq(), bandera);
+			preOrden(nodo->getHijoDer(), bandera);
+		}
+		else if(nodo != nullptr){
+			preOrden(nodo->getHijoIzq(), bandera);
+			preOrden(nodo->getHijoDer(), bandera);
+		}
 	}
 
 }

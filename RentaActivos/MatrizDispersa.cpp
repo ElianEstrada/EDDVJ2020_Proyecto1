@@ -473,6 +473,20 @@ NodoMatriz* MatrizDispersa::buscarUsuarioSig(NodoMatriz* nodo, string emp) {
 }
 
 
+NodoMatriz* MatrizDispersa::buscarUsuarioCabeza(NodoMatriz* usuarioActual) {
+
+	NodoMatriz* aux = usuarioActual;
+
+	while (aux->getDelante() != nullptr && aux != nullptr) {
+		
+		aux = aux->getDelante();
+
+	}
+
+	return aux;
+}
+
+
 //Metodo para ver si ya existe un departamento
 NodoMatriz* MatrizDispersa::buscarDepartamento(string departamento) {
 
@@ -614,7 +628,7 @@ NodoAVL* MatrizDispersa::catalogoActivos(Usuario* usuario, NodoMatriz* comienzo,
 
 				if (aux2->getUsuario() != usuario) {
 					if (bandera) {
-						aux2->getUsuario()->getArbol()->preOrden();
+						aux2->getUsuario()->getArbol()->preOrden(true);
 					}
 					else {
 						NodoAVL* activoRentado = aux2->getUsuario()->getArbol()->buscar(id, aux2->getUsuario()->getArbol()->raiz);

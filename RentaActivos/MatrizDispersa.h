@@ -29,6 +29,7 @@ public:
 	NodoMatriz* buscarUsuarioAbajo(NodoMatriz* nodo, string dep);
 	NodoMatriz* buscarCabeceraH(NodoMatriz* usuarioActual);
 	NodoMatriz* buscarUsuarioSig(NodoMatriz* nodo, string emp);
+	NodoMatriz* buscarUsuarioCabeza(NodoMatriz* usuarioActual);
 
 
 	NodoMatriz* existe(NodoMatriz* cabezaH, string empresa);
