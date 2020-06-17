@@ -66,13 +66,23 @@ void ArbolAVL::insertar(Activo* activo, NodoAVL* &raiz) {
 
 void ArbolAVL::eliminar(string id) {
 
-	//NodoAVL* eliminado = buscar(id, raiz);
-	raiz = eliminar(id, raiz);
+	NodoAVL* eliminado = buscar(id, raiz);
+	if (eliminado != nullptr) {
+		string idEliminado = eliminado->getActivo()->getID();
+		string nombre = eliminado->getActivo()->getNombre();
+		string descripcion = eliminado->getActivo()->getDescripcion();
 
-	/*if (raiz != nullptr) {
-		cout << "\nActivo Eliminado" << endl << "ID = " << eliminado->getActivo()->getID() << endl;
-		cout << "Nombre = " << eliminado->getActivo()->getNombre() << endl << "Descripcion = " << eliminado->getActivo()->getDescripcion() << endl;
-	}*/
+
+		raiz = eliminar(id, raiz);
+
+		if (raiz != nullptr) {
+			cout << "\nActivo Eliminado" << endl << "ID = " << idEliminado << endl;
+			cout << "Nombre = " << nombre << endl << "Descripcion = " << descripcion << endl;
+		}
+	}
+	else {
+		cout << "\nEl activo no existe...";
+	}
 }
 
 NodoAVL* ArbolAVL::eliminar(string id, NodoAVL*& raiz) {
@@ -275,13 +285,14 @@ bool ArbolAVL::preOrden() {
 
 void ArbolAVL::preOrden(NodoAVL* nodo) {
 
-	if (nodo != nullptr) {
+	if (nodo != nullptr && nodo->getActivo()->getDisponible()) {
 		cout << "\n>> ID = "<< nodo->getActivo()->getID() << "; Nombre = " << nodo->getActivo()->getNombre() << "; Descripcion = " << nodo->getActivo()->getDescripcion();
 		preOrden(nodo->getHijoIzq());
 		preOrden(nodo->getHijoDer());
 	}
 
 }
+
 
 
 int ArbolAVL::alturaDer(NodoAVL* der) {

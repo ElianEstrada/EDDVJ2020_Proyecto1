@@ -13,7 +13,9 @@ void menuPrincipal()
 {
 
 	matriz->insertarUsuario(new Usuario("ELIAN", "ELIADELYN", "PINPONPAN"), "GUATEMALA", "MAX");
-	matriz->insertarUsuario(new Usuario("ALEX", "ALFM98", "1234"), "GUATEMALA", "WALMART");
+	matriz->insertarUsuario(new Usuario("ALEX", "AFML98", "1234"), "GUATEMALA", "WALMART");
+	matriz->insertarUsuario(new Usuario("ALLAN", "ALLANWEB", "4321"), "GUATEMALA", "MAX");
+	matriz->insertarUsuario(new Usuario("NORMAN", "NORKY", "ABCD"), "JALAPA", "WALMART");
 
 	system("cls");
 	char opcion;
@@ -73,11 +75,11 @@ void login(bool bandera)
 		cout << "Ingrese su Empresa: ";
 		getline(cin, empresa);
 
-		usuarioActual = matriz->existe(matriz->buscarDepartamento(strCast(departamento)), strCast(empresa));
-		NodoMatriz* aux = usuarioActual;
-		if (usuarioActual != nullptr) {
+		NodoMatriz* aux = matriz->existe(matriz->buscarDepartamento(strCast(departamento)), strCast(empresa));
+		if (aux != nullptr) {
 			do{
-				if (usuarioActual->getUsuario()->getUsuario() == strCast(usuario) && usuarioActual->getUsuario()->getContraseña() == strCast(contrasenia)) {
+				if (aux->getUsuario()->getUsuario() == strCast(usuario) && aux->getUsuario()->getContraseña() == strCast(contrasenia)) {
+					usuarioActual = aux;
 					menuUsuario(usuario);
 				}
 
@@ -115,6 +117,7 @@ void eleccion(bool bandera, char opcion) {
 	string descripcionActivo;
 	string idActivo;
 	string nuevaDescripcion;
+	string diasRenta;
 
 	switch (opcion)
 	{
@@ -209,6 +212,43 @@ void eleccion(bool bandera, char opcion) {
 
 		break;
 	case '4':
+
+		if (bandera) {
+
+		}
+		else {
+
+			system("cls");
+			cout << "--------------------CATALOGO DE ACTIVOS--------------------" << endl;
+			
+			matriz->catalogoActivos(usuarioActual->getUsuario(), true, "");
+			cout << "\n\nIngrese el ID del activo a Rentar: ";
+			getline(cin, idActivo);
+
+			NodoAVL* activoRentado = matriz->catalogoActivos(usuarioActual->getUsuario(), false, idActivo);
+
+			if (activoRentado != nullptr) {
+
+				cout << "\nActivo a Rentar: " << endl;
+				cout << "\n>> ID = " << activoRentado->getActivo()->getID() << "; Nombre = " << activoRentado->getActivo()->getNombre() << "; Descripcion = " << activoRentado->getActivo()->getDescripcion() << endl;
+				activoRentado->getActivo()->setDisponible(false);
+
+				cout << "\nIngrese los dias por rentar: ";
+				cin >> diasRenta;
+
+				menuUsuario(usuarioActual->getUsuario()->getNombre());
+			}
+			else {
+				cout << "El activo no existe...";
+				cin.ignore();
+				menuUsuario(usuarioActual->getUsuario()->getNombre());
+			}
+
+			cin.ignore();
+			cin.get();
+
+		}
+
 		break;
 	case '5':
 		break;

@@ -589,3 +589,49 @@ bool MatrizDispersa::estaIzquierda(NodoMatriz* nodo, string departamento) {
 		return true;
 	}
 }
+
+
+//Metodo para mostrar todos los activos disponibles
+NodoAVL* MatrizDispersa::catalogoActivos(Usuario* usuario, bool bandera, string id) {
+
+	if (ini->getAbajo() != nullptr) {
+		return catalogoActivos(usuario, ini->getAbajo(), bandera, id);
+	}
+
+}
+
+NodoAVL* MatrizDispersa::catalogoActivos(Usuario* usuario, NodoMatriz* comienzo, bool bandera, string id) {
+
+	NodoMatriz* aux = comienzo;
+	NodoMatriz* aux2;
+
+	if (aux != nullptr) {
+		while (aux->getSig() != nullptr) {
+
+			aux = aux->getSig();
+			aux2 = aux;
+			do {
+
+				if (aux2->getUsuario() != usuario) {
+					if (bandera) {
+						aux2->getUsuario()->getArbol()->preOrden();
+					}
+					else {
+						NodoAVL* activoRentado = aux2->getUsuario()->getArbol()->buscar(id, aux2->getUsuario()->getArbol()->raiz);
+
+						if (activoRentado != nullptr) {
+							return activoRentado;
+						}
+					}
+				}
+
+				aux2 = aux2->getAtras();
+
+			} while (aux2 != nullptr);
+
+		}
+
+		return catalogoActivos(usuario, comienzo->getAbajo(), bandera, id);
+	}
+
+}

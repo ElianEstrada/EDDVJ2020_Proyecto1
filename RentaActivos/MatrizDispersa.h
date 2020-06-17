@@ -38,5 +38,10 @@ public:
 	bool estaAbajo(NodoMatriz* nodo, string empresa);
 	bool estaIzquierda(NodoMatriz* nodo, string departamento);
 
+
+	//Mostrar Activos
+	NodoAVL* catalogoActivos(Usuario* usuarioActual, bool bandera, string id);
+	NodoAVL* catalogoActivos(Usuario* usuarioActual, NodoMatriz* comienzo, bool bandera, string id);
+
 };
 
