@@ -11,6 +11,7 @@ MatrizDispersa* matriz = new MatrizDispersa();
 //Menu Principal
 void menuPrincipal()
 {
+
 	matriz->insertarUsuario(new Usuario("ELIAN", "ELIADELYN", "PINPONPAN"), "GUATEMALA", "MAX");
 	matriz->insertarUsuario(new Usuario("ALEX", "ALFM98", "1234"), "GUATEMALA", "WALMART");
 
@@ -20,7 +21,7 @@ void menuPrincipal()
 	cout << "-------------------BIENVENIDOS-------------------" << endl;
 	cout << "----------------Inicio de Sesión-----------------" << endl;
 
-	cout << "\n1. Como Administrador\n2. Como Usuario" << endl;
+	cout << "\n1. Como Administrador\n2. Como Usuario\n3. Salir" << endl;
 	cout << "\nEscoja una opción: ";
 	cin >> opcion;
 
@@ -34,7 +35,13 @@ void menuPrincipal()
 		//system("cls");
 		login(true); // Usuario
 		break;
+	case '3':
+		cout << "\nAdios, Vuelva pronto n_n...";
+		cin.ignore();
+		cin.get();
+		exit(0);
 
+		break;
 	default:
 		cout << "\nPor favor escoja una de las opciones disponibles...";
 		cin.ignore();
@@ -106,6 +113,8 @@ void eleccion(bool bandera, char opcion) {
 	string empresa;
 	string nombreActivo;
 	string descripcionActivo;
+	string idActivo;
+	string nuevaDescripcion;
 
 	switch (opcion)
 	{
@@ -139,7 +148,7 @@ void eleccion(bool bandera, char opcion) {
 			cout << "Ingrese la descripcion: ";
 			getline(cin, descripcionActivo);
 
-			usuarioActual->getUsuario()->getArbol()->insertar(new Activo(nombreActivo, descripcionActivo));
+			usuarioActual->getUsuario()->getArbol()->insertar(new Activo(strCast(nombreActivo), strCast(descripcionActivo)));
 
 			menuUsuario(usuarioActual->getUsuario()->getNombre());
 		}
@@ -157,12 +166,47 @@ void eleccion(bool bandera, char opcion) {
 				cin.ignore();
 				menuUsuario(usuarioActual->getUsuario()->getNombre());
 			}
-			cout << "\nIngrese el ID del activo a eliminar: ";
+			cout << "\n\nIngrese el ID del activo a eliminar: ";
+			getline(cin, idActivo);
+
+			usuarioActual->getUsuario()->getArbol()->eliminar(idActivo);
+
 			cin.ignore();
+			menuUsuario(usuarioActual->getUsuario()->getNombre());
 		}
 
 		break;
 	case '3':
+
+		if (bandera) {
+
+		}
+		else {
+			system("cls");
+			cout << "--------------------MODIFICAR ACTIVO--------------------" << endl;
+			if (!usuarioActual->getUsuario()->getArbol()->preOrden()) {
+				cout << "No hay activos...";
+				cin.ignore();
+				menuUsuario(usuarioActual->getUsuario()->getNombre());
+			}
+			cout << "\n\nIngrese el ID del activo a modificar: ";
+			getline(cin, idActivo);
+			cout << "\nIngrese la nueva descripcion: ";
+			getline(cin, nuevaDescripcion);
+
+			if (usuarioActual->getUsuario()->getArbol()->modificarActivo(idActivo, strCast(nuevaDescripcion))) {
+				cout << "\nActivo Modificado exitosamente...";
+				cin.ignore();
+				menuUsuario(usuarioActual->getUsuario()->getNombre());
+			}
+			else {
+				cout << "\nNo existe el activo...";
+				cin.ignore();
+				menuUsuario(usuarioActual->getUsuario()->getNombre());
+			}
+
+		}
+
 		break;
 	case '4':
 		break;

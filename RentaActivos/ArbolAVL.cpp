@@ -65,7 +65,14 @@ void ArbolAVL::insertar(Activo* activo, NodoAVL* &raiz) {
 
 
 void ArbolAVL::eliminar(string id) {
+
+	//NodoAVL* eliminado = buscar(id, raiz);
 	raiz = eliminar(id, raiz);
+
+	/*if (raiz != nullptr) {
+		cout << "\nActivo Eliminado" << endl << "ID = " << eliminado->getActivo()->getID() << endl;
+		cout << "Nombre = " << eliminado->getActivo()->getNombre() << endl << "Descripcion = " << eliminado->getActivo()->getDescripcion() << endl;
+	}*/
 }
 
 NodoAVL* ArbolAVL::eliminar(string id, NodoAVL*& raiz) {
@@ -74,21 +81,26 @@ NodoAVL* ArbolAVL::eliminar(string id, NodoAVL*& raiz) {
 
 		if (raiz->getActivo()->getID() == id) {
 			if (esHoja(raiz)) {
+
 				raiz = nullptr;
 				return raiz;
 			}
 			else if(raiz->getHijoDer() == nullptr && raiz->getHijoIzq() != nullptr){
+				
 				return raiz->getHijoIzq();
 			}
 			else if (raiz->getHijoIzq() == nullptr && raiz->getHijoDer() != nullptr) {
+
 				return raiz->getHijoDer();
 			}
 			else {
 				NodoAVL* masDerecha = buscarMasDerecha(raiz->getHijoIzq());
 
 				if (masDerecha != nullptr) {
+
 					raiz = eliminar(masDerecha->getActivo()->getID(), raiz);
-					raiz->getActivo()->setID(masDerecha->getActivo()->getID());
+					//raiz->getActivo()->setID(masDerecha->getActivo()->getID());
+					raiz->setActivo(masDerecha->getActivo());
 					if (facEquilibrio(alturaIzq(raiz->getHijoIzq()), alturaDer(raiz->getHijoDer())) == 2) {
 
 						/*if (numero > raiz->hijoDer->numero) {
@@ -201,6 +213,20 @@ void ArbolAVL::actualizar(int numero, int numeroNuevo, NodoAVL* nodo) {
 
 }*/
 
+bool ArbolAVL::modificarActivo(string id, string descripcion) {
+
+	NodoAVL* activo = buscar(id, raiz);
+
+	if (activo != nullptr) {
+		activo->getActivo()->setDescripcion(descripcion);
+		cout << "\nActivo Modificado:" << endl << "ID = " << activo->getActivo()->getID() << endl;
+		cout << "Nombre = " << activo->getActivo()->getNombre() << endl << "Descripcion = " << activo->getActivo()->getDescripcion() << endl;
+		return true;
+	}
+	return false;
+
+}
+
 
 void ArbolAVL::buscar(string id) {
 
@@ -221,10 +247,10 @@ NodoAVL* ArbolAVL::buscar(string id, NodoAVL* nodo) {
 			return nodo;
 		}
 		else if (id > nodo->getActivo()->getID()) {
-			buscar(id, nodo->getHijoDer());
+			return buscar(id, nodo->getHijoDer());
 		}
 		else {
-			buscar(id, nodo->getHijoIzq());
+			return buscar(id, nodo->getHijoIzq());
 		}
 
 	}

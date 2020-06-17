@@ -17,8 +17,10 @@ public:
 	NodoAVL* buscarMasDerecha(NodoAVL* nodo);
 	NodoAVL* buscarMasIzquierda(NodoAVL* nodo);
 
-	void actualizar(int numero, int numeroNuevo);
-	void actualizar(int numero, int numeroNuevo, NodoAVL* nodo);
+	/*void actualizar(int numero, int numeroNuevo);
+	void actualizar(int numero, int numeroNuevo, NodoAVL* nodo);*/
+
+	bool modificarActivo(string id, string descripcion);
 
 	NodoAVL* buscar(string id, NodoAVL* nodo);
 	void buscar(string id);
