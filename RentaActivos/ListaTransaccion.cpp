@@ -1,3 +1,4 @@
+#include <fstream>
 #include "ListaTransaccion.h"
 
 ListaTransaccion::ListaTransaccion() {
@@ -61,13 +62,26 @@ bool ListaTransaccion::estaVacia() {
 
 void ListaTransaccion::reporteActivosRentadosUsuario(string usuario) {
 
-    string dot = "digraph{ node[shape = box]; \n";
-    reporteActivosRentadosUsuario(dot);
+    string dot = "digraph{ \nrankdir = LR;\n node[shape = box]; \n";
+    dot = reporteActivosRentadosUsuario(dot, usuario);
+    dot += "}";
+    cout << dot;
 
+    ofstream file;
+    file.open("../Graficas/activosRentados.txt");
+
+    if (file.is_open()) {
+        file << dot;
+        file.close();
+    }
+
+    system("dot -Tpng ../Graficas/activosRentados.txt -o ../Graficas/activosRentados.png");
 }
 
 
 string ListaTransaccion::reporteActivosRentadosUsuario(string dot, string usuario){
+
+    int contador = 0;
 
     if (!estaVacia()) {
 
@@ -75,20 +89,44 @@ string ListaTransaccion::reporteActivosRentadosUsuario(string dot, string usuari
 
         do {
 
-            if (aux->getTransaccion()->getNombreUsuario() == usuario) {
+            if (aux->getTransaccion()->getNombreUsuario() == usuario && aux->getTransaccion()->getDias() != "") {
 
+                contador++;
+                dot += "activo" + to_string(contador) + "[label = <" + aux->getTransaccion()->getIdActivo()->getID() + " <br /> " + aux->getTransaccion()->getIdActivo()->getNombre() + ">]\n";
 
-
-                cout << ">>ID = " << aux->getTransaccion()->getIdActivo()->getID() << "; Nombre = " << aux->getTransaccion()->getIdActivo()->getNombre() << "; Tiempo de Renta = " << aux->getTransaccion()->getDias() << endl;
+                
             }
             aux = aux->getSig();
 
         } while (aux != ini);
 
+        int contador2 = 0;
+
+        do {
+
+            if (aux->getTransaccion()->getNombreUsuario() == usuario && aux->getTransaccion()->getDias() != "" && contador2 != contador - 1) {
+
+                contador2++;
+                dot += "activo" + to_string(contador2) + "-> activo" + to_string(contador2 + 1) + "\n";
+
+                if (contador2 = contador - 1) {
+                    break;
+                }
+
+                
+            }
+            aux = aux->getSig();
+
+        } while (aux != ini);
+
+        dot += usuario + "\n";
+
+        return dot;
+
     }
     else {
        
-        dot += "vacio; }";
+        dot += "vacio;\n" + usuario + "\n";
         return dot;
     }
 

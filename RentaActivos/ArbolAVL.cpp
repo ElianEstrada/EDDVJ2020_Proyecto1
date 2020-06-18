@@ -13,7 +13,7 @@ void ArbolAVL::insertar(Activo* activo) {
 
 }
 
-void ArbolAVL::insertar(Activo* activo, NodoAVL* &raiz) {
+void ArbolAVL::insertar(Activo* activo, NodoAVL*& raiz) {
 
 	if (raiz != nullptr) {
 
@@ -34,7 +34,7 @@ void ArbolAVL::insertar(Activo* activo, NodoAVL* &raiz) {
 				raiz->setHijoDer(new NodoAVL(activo));
 			}
 		}
-		else if(activo->getID() < raiz->getActivo()->getID()){
+		else if (activo->getID() < raiz->getActivo()->getID()) {
 			if (raiz->getHijoIzq() != nullptr) {
 				insertar(activo, raiz->getHijoIzq());
 
@@ -95,8 +95,8 @@ NodoAVL* ArbolAVL::eliminar(string id, NodoAVL*& raiz) {
 				raiz = nullptr;
 				return raiz;
 			}
-			else if(raiz->getHijoDer() == nullptr && raiz->getHijoIzq() != nullptr){
-				
+			else if (raiz->getHijoDer() == nullptr && raiz->getHijoIzq() != nullptr) {
+
 				return raiz->getHijoIzq();
 			}
 			else if (raiz->getHijoIzq() == nullptr && raiz->getHijoDer() != nullptr) {
@@ -126,7 +126,7 @@ NodoAVL* ArbolAVL::eliminar(string id, NodoAVL*& raiz) {
 				}
 			}
 		}
-		else if(id > raiz->getActivo()->getID()){
+		else if (id > raiz->getActivo()->getID()) {
 			raiz->setHijoDer(eliminar(id, raiz->getHijoDer()));
 
 			int mayor = mayorHijo(alturaDer(raiz->getHijoDer()), alturaIzq(raiz->getHijoIzq()));
@@ -168,10 +168,10 @@ NodoAVL* ArbolAVL::eliminar(string id, NodoAVL*& raiz) {
 
 			return raiz;
 		}
-		
+
 	}
 	else {
-		cout << "No hay nada que eliminar, arbol vacio"<<endl;
+		cout << "No hay nada que eliminar, arbol vacio" << endl;
 	}
 
 }
@@ -298,7 +298,7 @@ void ArbolAVL::preOrden(NodoAVL* nodo, bool bandera) {
 			preOrden(nodo->getHijoIzq(), bandera);
 			preOrden(nodo->getHijoDer(), bandera);
 		}
-		else if(nodo != nullptr){
+		else if (nodo != nullptr) {
 			preOrden(nodo->getHijoIzq(), bandera);
 			preOrden(nodo->getHijoDer(), bandera);
 		}
@@ -310,14 +310,14 @@ void ArbolAVL::preOrden(NodoAVL* nodo, bool bandera) {
 
 int ArbolAVL::alturaDer(NodoAVL* der) {
 
-	if(der != nullptr)
+	if (der != nullptr)
 		return der->getAltura();
 	return -1;
 }
 
 int ArbolAVL::alturaIzq(NodoAVL* izq) {
 
-	if(izq != nullptr)
+	if (izq != nullptr)
 		return izq->getAltura();
 	return -1;
 }
@@ -402,7 +402,7 @@ NodoAVL* ArbolAVL::dobleIzq(NodoAVL* nodo) {
 
 
 
-bool ArbolAVL::esHoja(NodoAVL* nodo){
+bool ArbolAVL::esHoja(NodoAVL* nodo) {
 
 	if (nodo != nullptr) {
 		return nodo->getHijoDer() == nullptr && nodo->getHijoIzq() == nullptr;
@@ -415,4 +415,32 @@ void ArbolAVL::activoEliminado(Activo* activo) {
 
 	cout << "\nActivo Eliminado: " << endl;
 	cout << "Id: " << activo->getID() << endl << "Nombre: " << activo->getNombre() << endl << "Descripción: " << activo->getDescripcion() << endl;
+}
+
+
+void ArbolAVL::activosUsuario(NodoAVL* usuarioActual, string usuario) {
+
+	string dot = "digraph{ \nrankdir = TB;\n node[shape = circle]; \n";
+
+
+}
+
+void ArbolAVL::activosUsuarioPre(NodoAVL* usuarioActual, string dot) {
+
+
+	if (usuarioActual != nullptr && usuarioActual->getActivo()->getDisponible()) {
+		
+		dot += usuarioActual->getActivo()->getNombre() + "[<" + usuarioActual->getActivo()->getID() + "<br />" + usuarioActual->getActivo()->getNombre() + "> color = blue];";
+		dot += 
+
+	}
+
+	if (usuarioActual != nullptr && !usuarioActual->getActivo()->getDisponible()) {
+		
+		
+	}
+	else if (usuarioActual != nullptr) {
+		
+	}
+
 }

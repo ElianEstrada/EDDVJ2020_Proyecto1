@@ -176,6 +176,8 @@ void eleccion(bool bandera, char opcion) {
 
 			usuarioActual->getUsuario()->getArbol()->eliminar(idActivo);
 
+			cout << "Activo Eliminado exitosamente...";
+
 			cin.ignore();
 			menuUsuario(usuarioActual->getUsuario()->getNombre());
 		}
@@ -350,6 +352,14 @@ void eleccion(bool bandera, char opcion) {
 
 		break;
 	case '8':
+
+		system("cls");
+		cout << "--------------------ACTIVOS RENTADOS POR UN USUARIO--------------------" << endl;
+		cout << "\nIngrese el nombre del usuario: ";
+		getline(cin, usuario);
+
+		transacciones->reporteActivosRentadosUsuario(strCast(usuario));
+
 		break;
 	case '9':
 		menuPrincipal();
