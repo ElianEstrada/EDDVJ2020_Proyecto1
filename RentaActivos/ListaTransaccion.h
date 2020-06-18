@@ -18,6 +18,7 @@ public:
     bool recorrerLista(string usuario);
     void reporteActivosRentadosUsuario(string usuario);
     string reporteActivosRentadosUsuario(string dot, string usuario);
+    void reporteTransacciones();
     bool estaVacia();
 };
 

@@ -110,8 +110,9 @@ NodoAVL* ArbolAVL::eliminar(string id, NodoAVL*& raiz) {
 				if (masDerecha != nullptr) {
 
 					raiz = eliminar(masDerecha->getActivo()->getID(), raiz);
-					//raiz->getActivo()->setID(masDerecha->getActivo()->getID());
-					raiz->setActivo(masDerecha->getActivo());
+					NodoAVL* aux = buscar(id, raiz);
+					aux->setActivo(masDerecha->getActivo());
+
 					if (facEquilibrio(alturaIzq(raiz->getHijoIzq()), alturaDer(raiz->getHijoDer())) == 2) {
 
 						/*if (numero > raiz->hijoDer->numero) {

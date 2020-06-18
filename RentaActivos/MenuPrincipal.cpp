@@ -331,6 +331,14 @@ void eleccion(bool bandera, char opcion) {
 
 		if (bandera) {
 
+			system("cls");
+			cout << "--------------------REPORTE DE TRANSACCIONES--------------------" << endl;
+
+			transacciones->reporteTransacciones();
+
+			cout << "\n";
+			system("pause");
+			adminMenu();
 		}
 		else {
 

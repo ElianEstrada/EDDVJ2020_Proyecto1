@@ -107,11 +107,6 @@ string ListaTransaccion::reporteActivosRentadosUsuario(string dot, string usuari
 
                 contador2++;
                 dot += "activo" + to_string(contador2) + "-> activo" + to_string(contador2 + 1) + "\n";
-
-                if (contador2 = contador - 1) {
-                    break;
-                }
-
                 
             }
             aux = aux->getSig();
@@ -128,5 +123,69 @@ string ListaTransaccion::reporteActivosRentadosUsuario(string dot, string usuari
         dot += "vacio;\n" + usuario + "\n";
         return dot;
     }
+
+}
+
+void ListaTransaccion::reporteTransacciones() {
+
+    string dot = "digraph{ \nrankdir = LR;\n node[shape = box, color = red]; \n";
+
+    NodoTransaccion* aux = ini;
+
+    do {
+
+        if (aux->getTransaccion()->getDias() != "") {
+            dot += "\"" + aux->getTransaccion()->getId() + "\n" + "RENTADO\n" + aux->getTransaccion()->getIdActivo()->getNombre() + "\n" + aux->getTransaccion()->getNombreUsuario() + "\"->\n";
+        }
+        else {
+            dot += "\"" + aux->getTransaccion()->getId() + "\n" + "DEVUELTO\n" + aux->getTransaccion()->getIdActivo()->getNombre() + "\n" + aux->getTransaccion()->getNombreUsuario() + "\"->\n";
+        }
+
+        aux = aux->getSig();
+
+    } while (aux != ini);
+
+
+    if (ini->getTransaccion()->getDias() != "") {
+        dot += "\"" + ini->getTransaccion()->getId() + "\n" + "RENTADO\n" + ini->getTransaccion()->getIdActivo()->getNombre() + "\n" + ini->getTransaccion()->getNombreUsuario() + "\"->\n";
+    }
+    else {
+        dot += "\"" + ini->getTransaccion()->getId() + "\n" + "DEVUELTO\n" + ini->getTransaccion()->getIdActivo()->getNombre() + "\n" + ini->getTransaccion()->getNombreUsuario() + "\"->\n";
+    }
+
+
+    aux = fin;
+
+    do {
+
+        if (aux->getTransaccion()->getDias() != "") {
+            dot += "\"" + aux->getTransaccion()->getId() + "\n" + "RENTADO\n" + aux->getTransaccion()->getIdActivo()->getNombre() + "\n" + aux->getTransaccion()->getNombreUsuario() + "\"->\n";
+        }
+        else {
+            dot += "\"" + aux->getTransaccion()->getId() + "\n" + "DEVUELTO\n" + aux->getTransaccion()->getIdActivo()->getNombre() + "\n" + aux->getTransaccion()->getNombreUsuario() + "\"->\n";
+        }
+
+        aux = aux->getAnt();
+
+    } while (aux->getAnt() != fin);
+
+    if (aux->getTransaccion()->getDias() != "") {
+        dot += "\"" + aux->getTransaccion()->getId() + "\n" + "RENTADO\n" + aux->getTransaccion()->getIdActivo()->getNombre() + "\n" + aux->getTransaccion()->getNombreUsuario() + "\"";
+    }
+    else {
+        dot += "\"" + aux->getTransaccion()->getId() + "\n" + "DEVUELTO\n" + aux->getTransaccion()->getIdActivo()->getNombre() + "\n" + aux->getTransaccion()->getNombreUsuario() + "\"";
+    }
+
+    dot += ";\n}";
+
+    ofstream file;
+    file.open("../Graficas/reporteTransacciones.txt");
+
+    if (file.is_open()) {
+        file << dot;
+        file.close();
+    }
+
+    system("dot -Tpng ../Graficas/reporteTransacciones.txt -o ../Graficas/reporteTransacciones.png");
 
 }
