@@ -14,7 +14,17 @@ ListaTransaccion* transacciones = new ListaTransaccion();
 void menuPrincipal()
 {
 
-	matriz->insertarUsuario(new Usuario("ELIAN", "ELIADELYN", "PINPONPAN"), "GUATEMALA", "MAX");
+	Usuario* usuario1 = new Usuario("ELIAN", "ELIADELYN", "PINPONPAN");
+	usuario1->getArbol()->insertar(new Activo("ACTIVO1", "ACTIVO1"));
+	usuario1->getArbol()->insertar(new Activo("ACTIVO2", "ACTIVO2"));
+	usuario1->getArbol()->insertar(new Activo("ACTIVO3", "ACTIVO3"));
+	usuario1->getArbol()->insertar(new Activo("ACTIVO4", "ACTIVO4"));
+	usuario1->getArbol()->insertar(new Activo("ACTIVO5", "ACTIVO1"));
+	usuario1->getArbol()->insertar(new Activo("ACTIVO6", "ACTIVO2"));
+	usuario1->getArbol()->insertar(new Activo("ACTIVO7", "ACTIVO3"));
+	usuario1->getArbol()->insertar(new Activo("ACTIVO8", "ACTIVO4"));
+
+	matriz->insertarUsuario(usuario1, "GUATEMALA", "MAX");
 	matriz->insertarUsuario(new Usuario("ALEX", "AFML98", "1234"), "GUATEMALA", "WALMART");
 	matriz->insertarUsuario(new Usuario("ALLAN", "ALLANWEB", "4321"), "GUATEMALA", "MAX");
 	matriz->insertarUsuario(new Usuario("NORMAN", "NORKY", "ABCD"), "JALAPA", "WALMART");
@@ -343,6 +353,43 @@ void eleccion(bool bandera, char opcion) {
 
 		if (bandera) {
 
+			system("cls");
+			cout << "--------------------ACTIVOS DE UN USUARIO--------------------" << endl;
+			cout << "\nIngrese el nombre del usuario: ";
+			getline(cin, usuario);
+			cout << "Ingrese el departamento: ";
+			getline(cin, departamento);
+			cout << "Ingrese la empresa: ";
+			getline(cin, empresa);
+
+			NodoMatriz* aux = matriz->existe(matriz->buscarDepartamento(strCast(departamento)), strCast(empresa));
+			if (aux != nullptr) {
+				do {
+					if (aux->getUsuario()->getUsuario() == strCast(usuario)) {
+						
+						aux->getUsuario()->getArbol()->activosUsuario(aux->getUsuario()->getArbol()->raiz, usuario);
+						break;
+
+					}
+
+					aux = aux->getAtras();
+				} while (aux != nullptr);
+
+				if (aux == nullptr) {
+					cout << "\nEl nombre del usuario esta incorrecto..." << endl;
+					cin.ignore();
+					adminMenu();
+				}
+			}
+			else {
+				cout << "\nEl usuario no existe..." << endl;
+				cin.ignore();
+				adminMenu();
+			}
+
+			system("pause");
+			adminMenu();
+
 		}
 		else {
 
@@ -359,6 +406,9 @@ void eleccion(bool bandera, char opcion) {
 		getline(cin, usuario);
 
 		transacciones->reporteActivosRentadosUsuario(strCast(usuario));
+
+		cout << "\n"; system("pause");
+		adminMenu();
 
 		break;
 	case '9':

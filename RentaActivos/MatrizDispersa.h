@@ -32,6 +32,7 @@ public:
 	NodoMatriz* buscarUsuarioCabeza(NodoMatriz* usuarioActual);
 
 
+
 	NodoMatriz* existe(NodoMatriz* cabezaH, string empresa);
 	bool existeNombre(NodoMatriz* usuarios, string nombre);
 

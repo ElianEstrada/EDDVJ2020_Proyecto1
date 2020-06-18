@@ -45,7 +45,7 @@ public:
 	void activoEliminado(Activo* activo);
 
 	void activosUsuario(NodoAVL* usuarioActual, string usuario);
-	void activosUsuarioPre(NodoAVL* usuarioActual, string dot);
+	string activosUsuarioPre(NodoAVL* usuarioActual, string dot);
 
 };
 

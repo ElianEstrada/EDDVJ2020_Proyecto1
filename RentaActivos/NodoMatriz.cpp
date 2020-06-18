@@ -77,6 +77,7 @@ void NodoMatriz::setUsuario(Usuario* usuario) {
 }
 
 Usuario* NodoMatriz::getUsuario() {
+
 	return usuario;
 }
 

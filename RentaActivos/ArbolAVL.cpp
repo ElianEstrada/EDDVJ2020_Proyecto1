@@ -1,4 +1,5 @@
 #include "ArbolAVL.h"
+#include <fstream>
 #include <iostream>
 
 using namespace std;
@@ -286,22 +287,30 @@ bool ArbolAVL::preOrden(bool bandera) {
 void ArbolAVL::preOrden(NodoAVL* nodo, bool bandera) {
 
 	if (bandera) {
-		if (nodo != nullptr && nodo->getActivo()->getDisponible()) {
-			cout << "\n>> ID = " << nodo->getActivo()->getID() << "; Nombre = " << nodo->getActivo()->getNombre() << "; Descripcion = " << nodo->getActivo()->getDescripcion();
+		if (nodo != nullptr) {
+			if (nodo->getActivo()->getDisponible()) {
+
+				cout << "\n>> ID = " << nodo->getActivo()->getID() << "; Nombre = " << nodo->getActivo()->getNombre() << "; Descripcion = " << nodo->getActivo()->getDescripcion();
+
+			}
 			preOrden(nodo->getHijoIzq(), bandera);
 			preOrden(nodo->getHijoDer(), bandera);
 		}
 	}
 	else {
-		if (nodo != nullptr && !nodo->getActivo()->getDisponible()) {
-			cout << "\n>> ID = " << nodo->getActivo()->getID() << "; Nombre = " << nodo->getActivo()->getNombre() << "; Descripcion = " << nodo->getActivo()->getDescripcion();
+		if (nodo != nullptr) {
+
+			if (!nodo->getActivo()->getDisponible()) {
+				cout << "\n>> ID = " << nodo->getActivo()->getID() << "; Nombre = " << nodo->getActivo()->getNombre() << "; Descripcion = " << nodo->getActivo()->getDescripcion();
+			}
+
 			preOrden(nodo->getHijoIzq(), bandera);
 			preOrden(nodo->getHijoDer(), bandera);
-		}
+		}/*
 		else if (nodo != nullptr) {
 			preOrden(nodo->getHijoIzq(), bandera);
 			preOrden(nodo->getHijoDer(), bandera);
-		}
+		}*/
 	}
 
 }
@@ -420,27 +429,54 @@ void ArbolAVL::activoEliminado(Activo* activo) {
 
 void ArbolAVL::activosUsuario(NodoAVL* usuarioActual, string usuario) {
 
-	string dot = "digraph{ \nrankdir = TB;\n node[shape = circle]; \n";
+	string dot = "digraph{ \nrankdir = TB;\n node[shape = box]\n " + usuario + "\n node[shape = circle]; \n";
+	dot += activosUsuarioPre(usuarioActual, dot) + "\n}";
+
+	ofstream file;
+	file.open("../Graficas/activosUsuario.txt");
+
+	if (file.is_open()) {
+		file << dot;
+		file.close();
+	}
+
+	system("dot -Tpng ../Graficas/activosUsuario.txt -o ../Graficas/activosUsuario.png");
 
 
 }
 
-void ArbolAVL::activosUsuarioPre(NodoAVL* usuarioActual, string dot) {
+string ArbolAVL::activosUsuarioPre(NodoAVL* usuarioActual, string dot) {
 
-
+	string dot2 = "";
 	if (usuarioActual != nullptr && usuarioActual->getActivo()->getDisponible()) {
-		
-		dot += usuarioActual->getActivo()->getNombre() + "[<" + usuarioActual->getActivo()->getID() + "<br />" + usuarioActual->getActivo()->getNombre() + "> color = blue];";
-		dot += 
+
+		dot2 += usuarioActual->getActivo()->getNombre() + "[ label = <" + usuarioActual->getActivo()->getID() + "<br />" + usuarioActual->getActivo()->getNombre() + "> color = blue];\n";
+
+		if (usuarioActual->getHijoIzq() != nullptr) {
+			dot2 += activosUsuarioPre(usuarioActual->getHijoIzq(), dot2) + usuarioActual->getActivo()->getNombre() + "->" + usuarioActual->getHijoIzq()->getActivo()->getNombre() + "; \n";
+		}
+		if (usuarioActual->getHijoDer() != nullptr) {
+			dot2 += activosUsuarioPre(usuarioActual->getHijoDer(), dot2) + usuarioActual->getActivo()->getNombre() + "->" + usuarioActual->getHijoDer()->getActivo()->getNombre() + ";\n";
+		}
 
 	}
 
 	if (usuarioActual != nullptr && !usuarioActual->getActivo()->getDisponible()) {
-		
-		
+
+		dot2 += usuarioActual->getActivo()->getNombre() + "[label = <" + usuarioActual->getActivo()->getID() + "<br />" + usuarioActual->getActivo()->getNombre() + "> color = red];\n";
+
+		if (usuarioActual->getHijoIzq() != nullptr) {
+			dot2 += activosUsuarioPre(usuarioActual->getHijoIzq(), dot2) + usuarioActual->getActivo()->getNombre() + "->" + usuarioActual->getHijoIzq()->getActivo()->getNombre() + ";\n";
+		}
+		if (usuarioActual->getHijoDer() != nullptr) {
+			dot2 += activosUsuarioPre(usuarioActual->getHijoDer(), dot2) + usuarioActual->getActivo()->getNombre() + "->" + usuarioActual->getHijoDer()->getActivo()->getNombre() + ";\n";
+		}
+
 	}
 	else if (usuarioActual != nullptr) {
-		
+
 	}
+
+	return dot2;
 
 }

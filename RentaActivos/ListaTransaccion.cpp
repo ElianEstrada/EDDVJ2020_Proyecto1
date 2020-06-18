@@ -65,7 +65,6 @@ void ListaTransaccion::reporteActivosRentadosUsuario(string usuario) {
     string dot = "digraph{ \nrankdir = LR;\n node[shape = box]; \n";
     dot = reporteActivosRentadosUsuario(dot, usuario);
     dot += "}";
-    cout << dot;
 
     ofstream file;
     file.open("../Graficas/activosRentados.txt");
