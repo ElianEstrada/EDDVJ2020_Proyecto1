@@ -464,7 +464,7 @@ string ArbolAVL::activosUsuarioPre(NodoAVL* usuarioActual, string dot) {
 
 	if (usuarioActual != nullptr && !usuarioActual->getActivo()->getDisponible()) {
 
-		dot2 += usuarioActual->getActivo()->getID() + "[label = <" + "\"" + usuarioActual->getActivo()->getID() + "\"" + "<br />" + usuarioActual->getActivo()->getNombre() + "> color = red];\n";
+		dot2 += "\"" + usuarioActual->getActivo()->getID() + "\"" + "[label = <" + "\"" + usuarioActual->getActivo()->getID() + "\"" + "<br />" + usuarioActual->getActivo()->getNombre() + "> color = red];\n";
 
 		if (usuarioActual->getHijoIzq() != nullptr) {
 			dot2 += activosUsuarioPre(usuarioActual->getHijoIzq(), dot2) + "\"" + usuarioActual->getActivo()->getID() + "\"" + "->" + "\"" + usuarioActual->getHijoIzq()->getActivo()->getID() + "\"" + ";\n";

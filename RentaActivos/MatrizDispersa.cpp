@@ -224,7 +224,7 @@ void MatrizDispersa::insertarAlFinalEmp(Usuario* usuario, NodoMatriz* cabeceraV,
 
 
 	//Veríficamos si el nodo que ingresamos se deberá ingrasar al medio en Departamentos o al Final
-	NodoMatriz* userAbajo = buscarUsuarioAbajo(cabeceraV->getSig(), departamento);
+	NodoMatriz* userAbajo = buscarUsuarioAbajo(cabeceraV->getAbajo(), departamento);
 
 	//Si hay un elemento debajo de donde tendría que ir nuestro nodo
 	if (userAbajo != nullptr) {
@@ -734,6 +734,7 @@ void MatrizDispersa::reporteMatrizDispersa() {
 
 	string dot = "digraph G{\n{node[shape = box, group = a];\n";
 
+	//Recorriendo Cabeceras Verticales
 	while (aux != nullptr) {
 
 		dot += "\"" + aux->getCabecera() + "\" ->";
@@ -761,6 +762,7 @@ void MatrizDispersa::reporteMatrizDispersa() {
 
 	dot += "\n{\nrank=same;\nnode[shape = box, group = true];\n";
 
+	//Recorrer para las cabeceras Horizontales
 	while (aux != nullptr) {
 
 		dot += "\"" + aux->getCabecera() + "\" ->";
@@ -789,11 +791,17 @@ void MatrizDispersa::reporteMatrizDispersa() {
 
 	dot += "\nnode[shape = box, group = true];\n";
 
+	//Recorrer las Filas de la Matriz
 	NodoMatriz* aux3 = ini->getAbajo();
 	aux = aux3;
 	while (aux != nullptr) {
 
-		dot += "{rank=same;";
+		if (aux->getAbajo() != nullptr) {
+			dot += "{rank=same;";
+		}
+		else {
+			dot += "{rank=max;";
+		}
 		while (aux != nullptr) {
 
 			if (aux->getUsuario() != nullptr) {
@@ -831,6 +839,52 @@ void MatrizDispersa::reporteMatrizDispersa() {
 
 		aux = aux->getAbajo();
 		aux3 = aux3->getAbajo();
+	}
+
+
+	//Recorrer Columnas de la Matriz
+	aux3 = ini->getSig();
+	aux = aux3;
+
+	while (aux != nullptr) {
+
+		while (aux != nullptr) {
+
+			if (aux->getUsuario() != nullptr) {
+				dot += "\"" + aux->getUsuario()->getUsuario() + "\" ->";
+			}
+			else {
+				dot += "\"" + aux->getCabecera() + "\" ->";
+			}
+
+			aux2 = aux;
+			aux = aux->getAbajo();
+		}
+
+		aux = aux2->getArriba();
+
+		while (aux != nullptr) {
+
+			if (aux != aux3) {
+
+				if (aux->getUsuario() != nullptr) {
+					dot += "\"" + aux->getUsuario()->getUsuario() + "\" ->";
+				}
+				else {
+					dot += "\"" + aux->getCabecera() + "\" ->";
+				}
+			}
+			else {
+
+				dot += "\"" + aux->getCabecera() + "\"\n";
+				break;
+			}
+
+			aux = aux->getArriba();
+		}
+
+		aux = aux->getSig();
+		aux3 = aux3->getSig();
 	}
 
 
