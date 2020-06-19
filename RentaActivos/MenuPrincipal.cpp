@@ -205,6 +205,19 @@ void eleccion(bool bandera, char opcion) {
 
 		if (bandera) {
 
+			system("cls");
+			cout << "--------------------USUARIOS REGISTRADOS--------------------" << endl;
+			cout << "\nIngrese el departamento: ";
+			getline(cin, departamento);
+			cout << "Ingrese la empresa: ";
+			getline(cin, empresa);
+
+			matriz->reporteUsuarios(strCast(empresa), strCast(departamento));
+
+			cout << endl;
+			system("pause");
+			adminMenu();
+
 		}
 		else {
 			system("cls");
@@ -277,7 +290,7 @@ void eleccion(bool bandera, char opcion) {
 
 				string fecha = to_string(newtime.tm_mday) + "-" + to_string(newtime.tm_mon + 1) + "-" + to_string(newtime.tm_year + 1900);
 
-				transacciones->insertarAlFinal(new Transaccion(activoRentado->getActivo(), usuarioActual->getUsuario()->getNombre(), matriz->buscarCabeceraH(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), matriz->buscarCabeceraV(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), fecha, diasRenta));
+				transacciones->insertarTransaccion(new Transaccion(activoRentado->getActivo(), usuarioActual->getUsuario()->getNombre(), matriz->buscarCabeceraH(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), matriz->buscarCabeceraV(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), fecha, diasRenta));
 
 				cout << "\nActivo rentado exitosamente...";
 				cin.ignore();
@@ -338,7 +351,7 @@ void eleccion(bool bandera, char opcion) {
 
 					string fecha = to_string(newtime.tm_mday) + "-" + to_string(newtime.tm_mon + 1) + "-" + to_string(newtime.tm_year + 1900);
 
-					transacciones->insertarAlFinal(new Transaccion(activoRentado->getActivo(), usuarioActual->getUsuario()->getNombre(), matriz->buscarCabeceraH(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), matriz->buscarCabeceraV(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), fecha, diasRenta));
+					transacciones->insertarTransaccion(new Transaccion(activoRentado->getActivo(), usuarioActual->getUsuario()->getNombre(), matriz->buscarCabeceraH(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), matriz->buscarCabeceraV(matriz->buscarUsuarioCabeza(usuarioActual))->getCabecera(), fecha, diasRenta));
 
 					cout << "\nActivo devuelto exitosamente...";
 					cin.ignore();
@@ -374,17 +387,17 @@ void eleccion(bool bandera, char opcion) {
 			{
 			case '1':
 
-				transacciones->ordernarAscendente();
-				transacciones->reporteTransacciones();
+				transacciones->reporteTransaccionesAscendente();
 
 				break;
 			case '2':
 
-				transacciones->ordenarDescendnete();
-				transacciones->reporteTransacciones();
+				transacciones->reporteTransaccionesDescendente();
 
 				break;
 			default:
+				cout << "\nPor favor ingrese una de las opciones disponibles...";
+				eleccion(true, '6');
 				break;
 			}
 

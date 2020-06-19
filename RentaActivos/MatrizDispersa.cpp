@@ -902,3 +902,38 @@ void MatrizDispersa::reporteMatrizDispersa() {
 	system("dot -Tpng ../Graficas/reporteMatrizDispersa.txt -o ../Graficas/reporteMatrizDispersa.png");
 
 }
+
+
+void MatrizDispersa::reporteUsuarios(string empresa, string departamento) {
+
+	string dot = "digraph G{\nrankdir = LR\nnode[shape = box];\n";
+	NodoMatriz* aux = existe(buscarDepartamento(departamento), empresa);
+
+	if (aux != nullptr) {
+		while (aux != nullptr) {
+
+			if (aux->getAtras() != nullptr) {
+				dot += "\"" + aux->getUsuario()->getNombre() + "\"->";
+			}
+			else {
+				dot += "\"" + aux->getUsuario()->getNombre() + "\"\n}";
+			}
+
+			aux = aux->getAtras();
+		}
+
+		ofstream file;
+		file.open("../Graficas/reporteUsuarios.txt");
+
+		if (file.is_open()) {
+			file << dot;
+			file.close();
+		}
+
+		system("dot -Tpng ../Graficas/reporteUsuarios.txt -o ../Graficas/reporteUsuarios.png");
+	}
+	else {
+		cout << "\nEl Departamento o la empresa no existen...";
+	}
+
+}

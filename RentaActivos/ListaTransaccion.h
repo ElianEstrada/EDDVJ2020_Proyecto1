@@ -14,14 +14,16 @@ class ListaTransaccion
 public:
     ListaTransaccion();
 
-    void insertarAlFinal(Transaccion *transaccion);
+    void insertarTransaccion(Transaccion* transaccion);
+    void insertarAlFinal(NodoTransaccion *elemento);
+    void insertarAlFrente(NodoTransaccion* elemento);
+    void insertarAlMedio(NodoTransaccion* elemento, NodoTransaccion* transaccionSiguiente);
+
     bool recorrerLista(string usuario);
     void reporteActivosRentadosUsuario(string usuario);
     string reporteActivosRentadosUsuario(string dot, string usuario);
-    void reporteTransacciones();
-
-    void ordernarAscendente();
-    void ordenarDescendnete();
+    void reporteTransaccionesAscendente();
+    void reporteTransaccionesDescendente();
 
     bool estaVacia();
 };

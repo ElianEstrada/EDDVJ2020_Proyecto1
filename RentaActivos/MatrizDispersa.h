@@ -50,6 +50,6 @@ public:
 	void reporteActivosEmpresa(string empresa);
 	void reporteActivosDepartamento(string departamento);
 	void reporteMatrizDispersa();
-
+	void reporteUsuarios(string empresa, string departamento);
 };
 
