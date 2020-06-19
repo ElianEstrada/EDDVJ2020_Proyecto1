@@ -172,6 +172,14 @@ void eleccion(bool bandera, char opcion) {
 
 		if (bandera) {
 
+			system("cls");
+			cout << "--------------------REPORTE MATRIZ DISPERSA--------------------" << endl << endl;
+
+			matriz->reporteMatrizDispersa();
+
+			system("pause");
+			adminMenu();
+
 		}
 		else {
 			system("cls");
@@ -229,6 +237,18 @@ void eleccion(bool bandera, char opcion) {
 
 		if (bandera) {
 
+			system("cls");
+			cout << "--------------------ACTIVOS DE UN DEPARTAMENTO--------------------" << endl;
+			cout << "\nIngrese el nombre del departamento: ";
+			getline(cin, departamento);
+
+			matriz->reporteActivosDepartamento(strCast(departamento));
+
+			cout << endl;
+			system("pause");
+
+			adminMenu();
+
 		}
 		else {
 
@@ -279,6 +299,18 @@ void eleccion(bool bandera, char opcion) {
 	case '5':
 
 		if (bandera) {
+
+			system("cls");
+			cout << "--------------------ACTIVOS DE UNA EMPRESA--------------------" << endl;
+			cout << "\nIngrese el nombre de una empresa: ";
+			getline(cin, empresa);
+
+			matriz->reporteActivosEmpresa(strCast(empresa));
+
+			cout << endl;
+			system("pause");
+
+			adminMenu();
 
 		}
 		else {
@@ -334,7 +366,27 @@ void eleccion(bool bandera, char opcion) {
 			system("cls");
 			cout << "--------------------REPORTE DE TRANSACCIONES--------------------" << endl;
 
-			transacciones->reporteTransacciones();
+			cout << "\n1. Ascendentemente\n2. Descendentemente" << endl;
+			cout << "\nIngrese la opción que desee: ";
+			cin >> opcion;
+
+			switch (opcion)
+			{
+			case '1':
+
+				transacciones->ordernarAscendente();
+				transacciones->reporteTransacciones();
+
+				break;
+			case '2':
+
+				transacciones->ordenarDescendnete();
+				transacciones->reporteTransacciones();
+
+				break;
+			default:
+				break;
+			}
 
 			cout << "\n";
 			system("pause");

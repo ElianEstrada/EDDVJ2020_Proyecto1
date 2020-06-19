@@ -1,4 +1,5 @@
 #include "MatrizDispersa.h"
+#include <fstream>
 
 
 MatrizDispersa::MatrizDispersa() {
@@ -647,5 +648,203 @@ NodoAVL* MatrizDispersa::catalogoActivos(Usuario* usuario, NodoMatriz* comienzo,
 
 		return catalogoActivos(usuario, comienzo->getAbajo(), bandera, id);
 	}
+
+}
+
+
+void MatrizDispersa::reporteActivosEmpresa(string empresa) {
+
+	string dot = "digraph{ \nrankdir = TB;node[shape = box, color = red]\n" + empresa + "\n";
+
+	NodoMatriz* nodoEmpresa = buscarEmpresa(empresa);
+	NodoMatriz* aux = nodoEmpresa->getSig();
+	NodoMatriz* aux2;
+
+	while (aux != nullptr) {
+
+		aux2 = aux;
+
+		while (aux2 != nullptr) {
+
+			dot += "node[shape = box];\n " + aux2->getUsuario()->getUsuario() +";\n node[shape = circle]; \n";
+			dot += aux2->getUsuario()->getArbol()->activosUsuarioPre(aux2->getUsuario()->getArbol()->raiz, dot);
+
+			aux2 = aux2->getAtras();
+		}
+
+		aux = aux->getSig();
+	}
+
+	dot += "\n}";
+
+
+	ofstream file;
+	file.open("../Graficas/reporteActivosEmpresa.txt");
+	if (file.is_open()) {
+		file << dot;
+		file.close();
+	}
+	
+	system("dot -Tpng ../Graficas/reporteActivosEmpresa.txt -o ../Graficas/reporteActivosEmpresa.png");
+
+}
+
+void MatrizDispersa::reporteActivosDepartamento(string departamento) {
+
+	string dot = "digraph{ \nrankdir = TB;\nnode[shape = box, color = red]\n" + departamento +"\n";
+
+	NodoMatriz* nodoDepartamento = buscarDepartamento(departamento);
+	NodoMatriz* aux = nodoDepartamento->getAbajo();
+	NodoMatriz* aux2;
+
+	while (aux != nullptr) {
+
+		aux2 = aux;
+
+		while (aux2 != nullptr) {
+
+			dot += "node[shape = box];\n " + aux2->getUsuario()->getUsuario() + ";\n node[shape = circle]; \n";
+			dot += aux2->getUsuario()->getArbol()->activosUsuarioPre(aux2->getUsuario()->getArbol()->raiz, dot);
+
+			aux2 = aux2->getAtras();
+		}
+
+		aux = aux->getAbajo();
+	}
+
+	dot += "\n}";
+
+
+	ofstream file;
+	file.open("../Graficas/reporteActivosDepartamento.txt");
+	if (file.is_open()) {
+		file << dot;
+		file.close();
+	}
+
+	system("dot -Tpng ../Graficas/reporteActivosDepartamento.txt -o ../Graficas/reporteActivosDepartamento.png");
+
+}
+
+
+void MatrizDispersa::reporteMatrizDispersa() {
+
+	NodoMatriz* aux = ini;
+	NodoMatriz* aux2 = nullptr;
+
+	string dot = "digraph G{\n{node[shape = box, group = a];\n";
+
+	while (aux != nullptr) {
+
+		dot += "\"" + aux->getCabecera() + "\" ->";
+
+		aux2 = aux;
+		aux = aux->getAbajo();
+	}
+	
+	aux = aux2->getArriba();
+
+	while (aux != nullptr) {
+
+		if (aux != ini) {
+
+			dot += "\"" + aux->getCabecera() + "\" ->";
+		}
+		else {
+
+			dot += "\"" + aux->getCabecera() + "\"\n}";
+			break;
+		}
+
+		aux = aux->getArriba();
+	}
+
+	dot += "\n{\nrank=same;\nnode[shape = box, group = true];\n";
+
+	while (aux != nullptr) {
+
+		dot += "\"" + aux->getCabecera() + "\" ->";
+
+		aux2 = aux;
+		aux = aux->getSig();
+	}
+
+	aux = aux2->getAnt();
+
+	while (aux != nullptr) {
+
+		if (aux != ini) {
+
+			dot += "\"" + aux->getCabecera() + "\" ->";
+		}
+		else {
+
+			dot += "\"" + aux->getCabecera() + "\"\n}";
+			break;
+		}
+
+		aux = aux->getAnt();
+	}
+
+
+	dot += "\nnode[shape = box, group = true];\n";
+
+	NodoMatriz* aux3 = ini->getAbajo();
+	aux = aux3;
+	while (aux != nullptr) {
+
+		dot += "{rank=same;";
+		while (aux != nullptr) {
+
+			if (aux->getUsuario() != nullptr) {
+				dot += "\"" + aux->getUsuario()->getUsuario() + "\" ->";
+			}
+			else {
+				dot += "\"" + aux->getCabecera() + "\" ->";
+			}
+
+			aux2 = aux;
+			aux = aux->getSig();
+		}
+
+		aux = aux2->getAnt();
+
+		while (aux != nullptr) {
+
+			if (aux != aux3) {
+
+				if (aux->getUsuario() != nullptr) {
+					dot += "\"" + aux->getUsuario()->getUsuario() + "\" ->";
+				}
+				else {
+					dot += "\"" + aux->getCabecera() + "\" ->";
+				}
+			}
+			else {
+
+				dot += "\"" + aux->getCabecera() + "\"}\n";
+				break;
+			}
+
+			aux = aux->getAnt();
+		}
+
+		aux = aux->getAbajo();
+		aux3 = aux3->getAbajo();
+	}
+
+
+
+	dot += "\n}";
+
+	ofstream file;
+	file.open("../Graficas/reporteMatrizDispersa.txt");
+
+	if (file.is_open()) {
+		file << dot;
+		file.close();
+	}
+
+	system("dot -Tpng ../Graficas/reporteMatrizDispersa.txt -o ../Graficas/reporteMatrizDispersa.png");
 
 }

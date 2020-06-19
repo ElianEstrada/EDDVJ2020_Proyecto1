@@ -19,6 +19,10 @@ public:
     void reporteActivosRentadosUsuario(string usuario);
     string reporteActivosRentadosUsuario(string dot, string usuario);
     void reporteTransacciones();
+
+    void ordernarAscendente();
+    void ordenarDescendnete();
+
     bool estaVacia();
 };
 

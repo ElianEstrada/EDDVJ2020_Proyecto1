@@ -16,9 +16,9 @@ void ListaTransaccion::insertarAlFinal(Transaccion* transaccion)
     if (!estaVacia()) {
         elemento->setSig(ini);
         elemento->setAnt(fin);
-        fin->setSig(elemento);
-        ini->setAnt(elemento);
         fin = elemento;
+        ini->setAnt(elemento);
+        elemento->getAnt()->setSig(elemento);
     }
     else {
         elemento->setSig(elemento);
@@ -187,5 +187,62 @@ void ListaTransaccion::reporteTransacciones() {
     }
 
     system("dot -Tpng ../Graficas/reporteTransacciones.txt -o ../Graficas/reporteTransacciones.png");
+
+}
+
+
+void ListaTransaccion::ordernarAscendente() {
+
+
+    NodoTransaccion* aux = ini->getSig();
+    NodoTransaccion* aux2;
+    NodoTransaccion* aux3;
+
+
+    if (aux != nullptr) {
+
+        do {
+           
+            aux2 = ini;
+
+            do {
+
+
+
+                if (aux2->getTransaccion()->getId() > aux->getTransaccion()->getId()) {
+
+                    aux3 = aux;
+                    aux->getTransaccion()->setId(aux2->getTransaccion()->getId());
+                    aux->getTransaccion()->setIdActivo(aux2->getTransaccion()->getIdActivo());
+                    aux->getTransaccion()->setNombreUsuario(aux2->getTransaccion()->getNombreUsuario());
+                    aux->getTransaccion()->setDepartamento(aux2->getTransaccion()->getDepartamento());
+                    aux->getTransaccion()->setEmpresa(aux2->getTransaccion()->getEmpresa());
+                    aux->getTransaccion()->setFecha(aux2->getTransaccion()->getFecha());
+                    aux->getTransaccion()->setDias(aux2->getTransaccion()->getDias());
+
+                    aux2->getTransaccion()->setId(aux3->getTransaccion()->getId());
+                    aux2->getTransaccion()->setIdActivo(aux3->getTransaccion()->getIdActivo());
+                    aux2->getTransaccion()->setNombreUsuario(aux3->getTransaccion()->getNombreUsuario());
+                    aux2->getTransaccion()->setDepartamento(aux3->getTransaccion()->getDepartamento());
+                    aux2->getTransaccion()->setEmpresa(aux3->getTransaccion()->getEmpresa());
+                    aux2->getTransaccion()->setFecha(aux3->getTransaccion()->getFecha());
+                    aux2->getTransaccion()->setDias(aux3->getTransaccion()->getDias());
+
+                }
+
+                aux2 = aux2->getSig();
+
+            } while (aux2->getSig() != ini);
+
+            aux = aux->getSig();
+
+        } while (aux != fin);
+
+    }
+
+
+}
+
+void ListaTransaccion::ordenarDescendnete() {
 
 }

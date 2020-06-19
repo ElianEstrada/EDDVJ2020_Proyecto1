@@ -451,26 +451,26 @@ string ArbolAVL::activosUsuarioPre(NodoAVL* usuarioActual, string dot) {
 	string dot2 = "";
 	if (usuarioActual != nullptr && usuarioActual->getActivo()->getDisponible()) {
 
-		dot2 += usuarioActual->getActivo()->getNombre() + "[ label = <" + usuarioActual->getActivo()->getID() + "<br />" + usuarioActual->getActivo()->getNombre() + "> color = blue];\n";
+		dot2 += "\"" + usuarioActual->getActivo()->getID() + "\"" +"[ label = <" + usuarioActual->getActivo()->getID() + "<br />" + usuarioActual->getActivo()->getNombre() + "> color = blue];\n";
 
 		if (usuarioActual->getHijoIzq() != nullptr) {
-			dot2 += activosUsuarioPre(usuarioActual->getHijoIzq(), dot2) + usuarioActual->getActivo()->getNombre() + "->" + usuarioActual->getHijoIzq()->getActivo()->getNombre() + "; \n";
+			dot2 += activosUsuarioPre(usuarioActual->getHijoIzq(), dot2) + "\"" + usuarioActual->getActivo()->getID() + "\"" +"->" + "\"" + usuarioActual->getHijoIzq()->getActivo()->getID() + "\"" + "; \n";
 		}
 		if (usuarioActual->getHijoDer() != nullptr) {
-			dot2 += activosUsuarioPre(usuarioActual->getHijoDer(), dot2) + usuarioActual->getActivo()->getNombre() + "->" + usuarioActual->getHijoDer()->getActivo()->getNombre() + ";\n";
+			dot2 += activosUsuarioPre(usuarioActual->getHijoDer(), dot2) + "\"" + usuarioActual->getActivo()->getID() + "\"" + "->" + "\"" + usuarioActual->getHijoDer()->getActivo()->getID() + +"\"" ";\n";
 		}
 
 	}
 
 	if (usuarioActual != nullptr && !usuarioActual->getActivo()->getDisponible()) {
 
-		dot2 += usuarioActual->getActivo()->getNombre() + "[label = <" + usuarioActual->getActivo()->getID() + "<br />" + usuarioActual->getActivo()->getNombre() + "> color = red];\n";
+		dot2 += usuarioActual->getActivo()->getID() + "[label = <" + "\"" + usuarioActual->getActivo()->getID() + "\"" + "<br />" + usuarioActual->getActivo()->getNombre() + "> color = red];\n";
 
 		if (usuarioActual->getHijoIzq() != nullptr) {
-			dot2 += activosUsuarioPre(usuarioActual->getHijoIzq(), dot2) + usuarioActual->getActivo()->getNombre() + "->" + usuarioActual->getHijoIzq()->getActivo()->getNombre() + ";\n";
+			dot2 += activosUsuarioPre(usuarioActual->getHijoIzq(), dot2) + "\"" + usuarioActual->getActivo()->getID() + "\"" + "->" + "\"" + usuarioActual->getHijoIzq()->getActivo()->getID() + "\"" + ";\n";
 		}
 		if (usuarioActual->getHijoDer() != nullptr) {
-			dot2 += activosUsuarioPre(usuarioActual->getHijoDer(), dot2) + usuarioActual->getActivo()->getNombre() + "->" + usuarioActual->getHijoDer()->getActivo()->getNombre() + ";\n";
+			dot2 += activosUsuarioPre(usuarioActual->getHijoDer(), dot2) + "\"" + usuarioActual->getActivo()->getID() + "\"" + "->" + "\"" + usuarioActual->getHijoDer()->getActivo()->getID() + "\"" + ";\n";
 		}
 
 	}

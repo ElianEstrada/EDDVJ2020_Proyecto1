@@ -45,5 +45,11 @@ public:
 	NodoAVL* catalogoActivos(Usuario* usuarioActual, bool bandera, string id);
 	NodoAVL* catalogoActivos(Usuario* usuarioActual, NodoMatriz* comienzo, bool bandera, string id);
 
+
+	//Metodos de reportes
+	void reporteActivosEmpresa(string empresa);
+	void reporteActivosDepartamento(string departamento);
+	void reporteMatrizDispersa();
+
 };
 

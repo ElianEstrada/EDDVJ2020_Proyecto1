@@ -47,5 +47,7 @@ public:
 	void activosUsuario(NodoAVL* usuarioActual, string usuario);
 	string activosUsuarioPre(NodoAVL* usuarioActual, string dot);
 
+	
+
 };
 
